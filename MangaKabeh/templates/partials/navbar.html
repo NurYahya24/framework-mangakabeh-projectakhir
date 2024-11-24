@@ -1,4 +1,4 @@
-<nav>
+<!-- <nav>
     <ul>
         <li><a href="{% url 'home' %}">Home</a></li>
         {% if user.is_authenticated %}
@@ -21,4 +21,57 @@
             <li><a href="{% url 'login' %}">Login</a></li>
         {% endif %}
     </ul>
+</nav> -->
+
+{% load static %}
+<nav class="navbar navbar-expand-lg bg-dark navbar-dark">
+    <div class="container-fluid">
+        <!-- Logo dan Brand -->
+        <a class="navbar-brand" href="#" style="font-weight: bold;">
+            MangaKabeh
+        </a>
+        <!-- Toggle Button untuk Navbar pada Mobile -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <!-- Navbar Content -->
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link {% if request.path == '/' %}active{% endif %}" href="{% url 'home' %}">Home</a>
+                </li>
+                {% if user.is_authenticated %}
+                    {% if user_group == 'Customer' %}
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.path == '/customer/dashboard/' %}active{% endif %}" href="{% url 'customer_dashboard' %}">Dashboard</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.path == '/cart/' %}active{% endif %}" href="{% url 'view_cart' %}">Cart</a>
+                        </li>
+                    {% elif user_group == 'Seller' %}
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.path == '/seller/dashboard/' %}active{% endif %}" href="{% url 'dashboard_seller' %}">Dashboard</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.path == '/profile/' %}active{% endif %}" href="{% url 'profile' %}">Profile</a>
+                        </li>
+                    {% elif user_group == 'Admin' %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Admin Panel</a>
+                        </li>
+                    {% endif %}
+                    <li class="nav-item">
+                        <form action="{% url 'logout' %}" method="post" style="display: inline;">
+                            {% csrf_token %}
+                            <button class="btn btn-outline-light ms-3" type="submit">Log Out</button>
+                        </form>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == '/login/' %}active{% endif %}" href="{% url 'login' %}">Login</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
 </nav>

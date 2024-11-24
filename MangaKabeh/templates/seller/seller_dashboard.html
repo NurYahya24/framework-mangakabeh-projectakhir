@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 {% block title %}Seller Dashboard{% endblock %}
 {% block content %}
+
+<div class="container-fluid" style="padding: 40px;">
     <h1>Manage Your Manga Listings</h1>
     <div>
         <a href="{% url 'add_manga' %}">Add Manga</a>
@@ -35,5 +37,6 @@
             {% endfor %}
         </tbody>
     </table>
+</div>
     
 {% endblock %}
