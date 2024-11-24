@@ -7,6 +7,8 @@
     {% load django_bootstrap5 %} 
     {% bootstrap_css %}
     {% load static %}
+    {% load humanize %} <!-- Untuk kasih tanda koma di harga -->
+
 </head>
 <body>
     <!-- Navbar -->
@@ -40,7 +42,7 @@
         <p style="font-size: 35px; font-weight: bold;">New Arrivals</p>
         <hr/>
         <div class="container-fluid" style="width: 100%">
-            <div class="row justify-content-center" style="gap: 20px;">
+            <div class="row justify-content-center" style="gap: 10px;">
                 {% for manga in mangas %}
                 <!-- <div class="manga-item">
                     <h2>{{ manga.title }}</h2>
@@ -52,14 +54,17 @@
                     <p>{{ manga.description|truncatewords:30 }}</p>
                     <a href="#">View Details</a>
                 </div> -->
-                <div class="card" style="max-width: 200px; padding: 0;">
-                    <img style="max-height: 220px;" src="{{ manga.image.url }}" class="card-img-top" alt="{{ manga.title }}">
+                <div class="card" style="max-width: 230px; padding: 0; background-color: #f5f5f5;">
+                    <img style="max-height: 250px;" src="{{ manga.image.url }}" class="card-img-top" alt="{{ manga.title }}">
                     <div class="card-body" style="padding: 10px;">
                         <p class="text-truncate" style="font-size: 20px; font-weight: bold; margin-bottom: 5px;">{{ manga.title }}</p>
                         <p style="font-size: 12px; margin-bottom: 5px;">By {{ manga.author }}</p>
-                        <p style="color: #ff9aa2; font-weight: bold; margin-bottom: 10px; font-size: 18px;">Rp50.000</p>
+                        <p style="color: #ff9aa2; font-weight: bold; margin-bottom: 10px; font-size: 18px;">
+                            Rp {{ manga.min_price|intcomma }}
+                        </p>
                         <hr style="margin: 5px 0;" />
-                        <p style="margin-bottom: 0;">Nama Toko</p>
+                        <p style="margin-bottom: 0; font-size: 12px;">{{ manga.seller.username }}</p>
+
                     </div>
                 </div>
                 

@@ -43,6 +43,20 @@ def dashboard_customer(request):
     return render(request, 'customer/customer_dashboard.html', {'user_group' : user_group})
 
 
+# def base(request):
+#     user_group = None
+#     if request.user.is_authenticated:
+#         if request.user.groups.filter(name='Customer').exists():
+#             user_group = 'Customer'
+#         elif request.user.groups.filter(name='Seller').exists():
+#             user_group = 'Seller'
+#         elif request.user.groups.filter(name='Admin').exists():
+#             user_group = 'Admin'
+#     mangas = Manga.objects.all()
+#     return render(request, 'base.html', {'user_group': user_group, 'mangas': mangas})
+
+from django.db.models import Min
+
 def base(request):
     user_group = None
     if request.user.is_authenticated:
@@ -52,8 +66,15 @@ def base(request):
             user_group = 'Seller'
         elif request.user.groups.filter(name='Admin').exists():
             user_group = 'Admin'
-    mangas = Manga.objects.all()
-    return render(request, 'base.html', {'user_group': user_group, 'mangas': mangas})
+    
+    # Mengambil semua manga dengan harga volume termurah
+    mangas = Manga.objects.all().annotate(min_price=Min('volumemanga__price'))
+    
+    return render(request, 'base.html', {
+        'user_group': user_group,
+        'mangas': mangas,
+    })
+
 
 @group_required('Seller')
 def add_manga(request):

@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'MangaKabeh',
-    'django_bootstrap5'
+    'django_bootstrap5',
+    'django.contrib.humanize',
 ]
 
 MIDDLEWARE = [
