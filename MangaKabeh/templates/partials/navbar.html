@@ -1,0 +1,24 @@
+<nav>
+    <ul>
+        <li><a href="{% url 'home' %}">Home</a></li>
+        {% if user.is_authenticated %}
+            {% if user_group == 'Customer' %}
+                <li><a href="{% url 'customer_dashboard' %}">Dashboard</a></li>
+                <li><a href="{% url 'view_cart' %}">Cart</a></li>
+            {% elif user_group == 'Seller' %}
+                <li><a href="{% url 'dashboard_seller' %}">Dashboard</a></li>
+                <li><a href="{% url 'profile' %}">Profile</a></li>
+            {% elif user_group == 'Admin' %}
+                <li><a href="#">Admin Panel</a></li>
+            {% endif %}
+            <li>
+                <form action="{% url 'logout' %}" method="post" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit">Log Out</button>
+                </form>
+            </li>
+        {% else %}
+            <li><a href="{% url 'login' %}">Login</a></li>
+        {% endif %}
+    </ul>
+</nav>

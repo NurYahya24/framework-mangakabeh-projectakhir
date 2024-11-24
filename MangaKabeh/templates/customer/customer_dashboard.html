@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block title %}User Dashboard{% endblock %}
+{% block content %}
+    <h1>Welcome, {{ user.username }}!</h1>
+    <div>
+        <a href="{% url 'view_cart' %}">View Cart</a>
+        <a href="{% url 'order_history' %}">Order History</a>
+    </div>
+{% endblock %}

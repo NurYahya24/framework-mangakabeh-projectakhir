@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block title %}Seller Dashboard{% endblock %}
+{% block content %}
+    <h1>Manage Your Manga Listings</h1>
+    <div>
+        <a href="{% url 'add_manga' %}">Add Manga</a>
+        <a href="{% url 'manage_orders' %}">Manage Orders</a>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Genres</th>              
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for manga in mangas %}
+                <tr>
+                    <td><img src="{{ manga.image.url }}" alt="{{ manga.title }}" width="100"></td>
+                    <td>{{ manga.title }}</td>
+                    <td>{{ manga.author }}</td>
+                    <td>{{ manga.genre.all|join:", " }}</td>  <!-- Joining multiple genres -->                    
+                    <td>
+                        <a href="#">Edit</a> | 
+                        <button onclick="">Delete</button>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="7">No manga found</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+{% endblock %}

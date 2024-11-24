@@ -1,0 +1,16 @@
+{% include 'partials/navbar.html' %}
+<h1>Profile</h1>
+<p>Username: {{ user.username }}</p>
+<p>Email: {{ user.email }}</p>
+
+{% if profile_type == 'Seller' %}
+    <h2>Seller Details</h2>
+    <p>Store Address: {{ profile.address }}</p>
+    <p>Phone Number: {{ profile.phone_number }}</p>
+{% elif profile_type == 'Customer' %}
+    <h2>Customer Details</h2>
+    <p>Address: {{ profile.address }}</p>
+    <p>Phone Number: {{ profile.phone_number }}</p>
+{% else %}
+    <p>No additional details available.</p>
+{% endif %}

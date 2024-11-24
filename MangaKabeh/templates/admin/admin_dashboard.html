@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block title %}Admin Dashboard{% endblock %}
+{% block content %}
+    <h1>Admin Panel</h1>
+    <div>
+        <a href="{% url 'manage_users' %}">Manage Users</a>
+        <a href="{% url 'manage_mangas' %}">Manage Mangas</a>
+    </div>
+{% endblock %}

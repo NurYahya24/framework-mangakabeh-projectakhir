@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}MangaKabeh{% endblock %}</title>
+</head>
+<body>
+    <!-- Navbar -->
+    {% include 'partials/navbar.html' %}
+    
+    <!-- Main Content -->
+    <div class="container">
+        {% block content %}
+        <h1>Welcome to MangaKabeh</h1>
+        <div class="manga-list">
+            {% for manga in mangas %}
+                <div class="manga-item">
+                    <h2>{{ manga.title }}</h2>
+                    <p>By {{ manga.author }}</p>
+                    <p>Genres: 
+                        {{ manga.genre.all|join:", " }}
+                    </p>
+                    <img src="{{ manga.image.url }}" alt="{{ manga.title }}" style="max-width: 200px;">
+                    <p>{{ manga.description|truncatewords:30 }}</p>
+                    <a href="#">View Details</a>
+                </div>
+            {% empty %}
+                <p>No manga available right now. Check back later!</p>
+            {% endfor %}
+        </div>
+        {% endblock %}
+    </div>
+    
+    <!-- Footer -->
+    {% include 'partials/footer.html' %}
+</body>
+</html>
