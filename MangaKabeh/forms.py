@@ -1,5 +1,5 @@
 from django import forms
-from .models.manga import Manga, VolumeManga
+from .models.manga import Manga, VolumeManga, Genre
 from django.contrib.auth.models import User
 from .models import Profile
 from django.forms import modelformset_factory
@@ -16,6 +16,24 @@ class MangaForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         for field in self.fields.values():
             field.widget.attrs.update({"class": "form-control"})
+# class MangaForm(forms.ModelForm):
+#     genre = forms.ModelMultipleChoiceField(
+#         queryset=Genre.objects.all(),
+#         widget=forms.CheckboxSelectMultiple(attrs={'class': 'custom-checkbox'})
+#     )
+
+#     class Meta:
+#         model = Manga
+#         fields = ['image', 'title', 'author', 'description', 'genre']
+#         widgets = {
+#             'description': forms.Textarea(attrs={'rows': 4}),
+#         }
+
+#     def __init__(self, *args, **kwargs):
+#         super().__init__(*args, **kwargs)
+#         for field in self.fields.values():
+#             field.widget.attrs.update({"class": "form-control"})
+
         
 VolumeFormSet = modelformset_factory(
     VolumeManga,

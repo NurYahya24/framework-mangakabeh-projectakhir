@@ -59,11 +59,16 @@ from django.db.models import Min
 
 def base(request):
     
-    # Mengambil semua manga dengan harga volume termurah
-    mangas = Manga.objects.all().annotate(min_price=Min('volumemanga__price'))
+    # Mengambil semua manga dengan harga volume termurah, urutkan berdasarkan ID terbalik (ID terbaru muncul di kiri)
+    mangas = Manga.objects.all().annotate(min_price=Min('volumemanga__price')).order_by('-id')
+    # mangas = Manga.objects.all().annotate(min_price=Min('volumemanga__price'))
+    genre_aksi = Manga.objects.filter(genre__name__iexact="Aksi").annotate(min_price=Min('volumemanga__price'))
+    genre_drama = Manga.objects.filter(genre__name__iexact="Drama").annotate(min_price=Min('volumemanga__price'))
     
     return render(request, 'base.html', {
         'mangas': mangas,
+        'genre_aksi': genre_aksi,
+        'genre_drama' : genre_drama,
     })
 
 @group_required('Customer')
