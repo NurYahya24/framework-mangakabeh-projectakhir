@@ -1,19 +1,23 @@
 from django.db import models
-from .seller import Seller
-
+from django.contrib.auth.models import User
+import os
 
 def manga_image_upload_path(instance, filename):
+    ext = os.path.splitext(filename)[1]
+    filename = f"cover{ext}"
     sanitized_title = instance.title.replace(' ', '_').lower()
-    sanitized_seller = instance.seller.username.replace(' ', '_').lower()
+    sanitized_seller = instance.seller.id
     return f'manga/{sanitized_seller}/{sanitized_title}/{filename}'
 
 class Manga(models.Model):
     title = models.CharField(max_length=255)
     author = models.CharField(max_length=255)
     description = models.TextField()
-    seller = models.ForeignKey(Seller, on_delete=models.CASCADE)
+    seller = models.ForeignKey(User, on_delete=models.CASCADE)
     image = models.ImageField(upload_to=manga_image_upload_path)
     genre = models.ManyToManyField("Genre")
+    class Meta :
+        unique_together = ('title', 'seller')
     def __str__(self) -> str:
         return self.title
     
@@ -21,9 +25,10 @@ class VolumeManga(models.Model):
     manga = models.ForeignKey(Manga, on_delete=models.CASCADE)
     volume = models.CharField(max_length=128, default='1')
     price = models.IntegerField()
+    stock = models.IntegerField()
     
     def __str__(self) -> str:
-        return self.volume
+        return f"{self.manga.title} - Volume {self.volume}"
     
 class Genre(models.Model):
     name = models.CharField(max_length=100, unique=True)

@@ -1,11 +1,120 @@
-{% extends 'base.html' %}
+{% extends '../base.html' %}
 {% block title %}Manga Form{% endblock %}
 {% block content %}
-<h1>Add Manga</h1>
-<form method="post" enctype="multipart/form-data">
+<form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
     {% csrf_token %}
-    {{ manga_form.as_p }}
+    <div class="mb-4">
+        <h3 class="text-center">Manga Form</h3>
+        <div class="card shadow p-4">
+            <div class="row g-4">
+                {% for field in form %}
+                <div class="{% if field.field.widget.input_type == 'textarea' or field.field.widget.input_type == 'file' %}col-12{% else %}col-md-6{% endif %}">
+                    <div class="mb-3">
+                        <label for="{{ field.id_for_label }}" class="form-label fw-bold">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.help_text %}
+                        <div class="form-text text-muted">{{ field.help_text }}</div>
+                        {% endif %}
+                        {% if field.errors %}
+                        <div class="invalid-feedback d-block mt-1">
+                            {{ field.errors|join:", " }}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
     
-    <button type="submit">Save Manga</button>
+
+    <h3>Manga Volume(s)</h3>
+    <table id="volume-formset" class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>Volume</th>
+                <th>Stock</th>
+                <th>Price</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody class="form-group">
+            {{ volume_formset.management_form }}
+            {% for vol in volume_formset %}
+            <tr class="volume-form">
+                <td>
+                    {{ vol.volume }}
+                </td>
+                <td>
+                    {{ vol.stock }}
+                </td>
+                <td>
+                    {{ vol.price }}
+                </td>
+                <td>
+                    {{ vol.id.as_hidden }}
+                    {{ vol.DELETE.as_hidden }}
+                    <button type="button" class="remove-volume btn btn-danger">Remove</button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="d-flex my-5 mx-3">
+        <button type="button" id="add-volume" class="btn btn-secondary me-3">Add Volume</button>
+        <button type="submit" class="btn btn-primary">Save Manga</button>
+    </div>
 </form>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const volumeFormset = document.querySelector('#volume-formset tbody'); // Target tbody for new rows
+        const addVolumeBtn = document.getElementById('add-volume');
+        let totalForms = parseInt(document.getElementById('id_form-TOTAL_FORMS').value);
+
+        // Add a new volume form
+        addVolumeBtn.addEventListener('click', function () {
+            const newRow = `
+                <tr class="volume-form">
+                    <td>
+                        <input type="text" name="form-${totalForms}-volume" id="id_form-${totalForms}-volume">
+                    </td>
+                    <td>
+                        <input type="number" name="form-${totalForms}-stock" id="id_form-${totalForms}-stock">
+                    </td>
+                    <td>
+                        <input type="number" name="form-${totalForms}-price" id="id_form-${totalForms}-price">
+                    </td>
+                    <td>
+                        <input type="hidden" name="form-${totalForms}-id" id="id_form-${totalForms}-id">
+                        <input type="hidden" name="form-${totalForms}-DELETE" id="id_form-${totalForms}-DELETE">
+                        <button type="button" class="remove-volume btn btn-danger">Remove</button>
+                    </td>
+                </tr>
+            `;
+            volumeFormset.insertAdjacentHTML('beforeend', newRow);
+            document.getElementById('id_form-TOTAL_FORMS').value = ++totalForms; // Update total forms count
+        });
+
+        // Remove a volume form
+        volumeFormset.addEventListener('click', function (event) {
+            if (event.target.classList.contains('remove-volume')) {
+                const row = event.target.closest('tr');
+                const deleteField = row.querySelector(`[name$="-DELETE"]`);
+                if (deleteField) {
+                    deleteField.value = "on"; // Mark for deletion
+                    row.style.display = "none"; // Hide the row
+                }
+            }
+        });
+
+        function myChangeFunction(input1) {
+            var input2 = document.getElementById('');
+            input2.value = input1.value;
+        }
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+{{ form.media.js }}
 {% endblock %}

@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends '../base.html' %}
 {% block title %}Seller Dashboard{% endblock %}
 {% block content %}
 
@@ -6,7 +6,6 @@
     <h1>Manage Your Manga Listings</h1>
     <div>
         <a href="{% url 'add_manga' %}">Add Manga</a>
-        <a href="{% url 'manage_orders' %}">Manage Orders</a>
     </div>
     <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
         <thead style="background-color: #FF9AA2;">
@@ -26,7 +25,7 @@
                     <td style="border: 1px solid #000000; text-align: center;">{{ manga.author }}</td>
                     <td style="border: 1px solid #000000; text-align: center;">{{ manga.genre.all|join:", " }}</td>
                     <td style="border: 1px solid #000000; text-align: center;">
-                        <a href="#">Edit</a> | 
+                        <a href="{% url 'edit_manga' manga.id %}">Update Manga</a> 
                         <button onclick="">Delete</button>
                     </td>
                 </tr>

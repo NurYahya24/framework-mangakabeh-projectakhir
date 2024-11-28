@@ -40,22 +40,22 @@
                 <li class="nav-item">
                     <a class="nav-link {% if request.path == '/' %}active{% endif %}" href="{% url 'home' %}">Home</a>
                 </li>
-                {% if user.is_authenticated %}
-                    {% if user_group == 'Customer' %}
+                {% if authenticated %}
+                    {% if navbar_user_group == 'Customer' %}
                         <li class="nav-item">
-                            <a class="nav-link {% if request.path == '/customer/dashboard/' %}active{% endif %}" href="{% url 'customer_dashboard' %}">Dashboard</a>
+                            <a class="nav-link {% if request.path == '/order/' %}active{% endif %}" href="{% url 'order_list' %}">Order List</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link {% if request.path == '/cart/' %}active{% endif %}" href="{% url 'view_cart' %}">Cart</a>
+                            <a class="nav-link {% if request.path == '/customer/cart/' %}active{% endif %}" href="{% url 'view_cart' %}">Cart</a>
                         </li>
-                    {% elif user_group == 'Seller' %}
+                    {% elif navbar_user_group == 'Seller' %}
                         <li class="nav-item">
                             <a class="nav-link {% if request.path == '/seller/dashboard/' %}active{% endif %}" href="{% url 'dashboard_seller' %}">Dashboard</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link {% if request.path == '/profile/' %}active{% endif %}" href="{% url 'profile' %}">Profile</a>
                         </li>
-                    {% elif user_group == 'Admin' %}
+                    {% elif navbar_user_group == 'Admin' %}
                         <li class="nav-item">
                             <a class="nav-link" href="#">Admin Panel</a>
                         </li>

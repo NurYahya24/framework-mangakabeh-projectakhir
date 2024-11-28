@@ -21,7 +21,8 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('MangaKabeh.urls'))
+    path('', include('MangaKabeh.urls')),
+    path('select2/', include('django_select2.urls')),
 ]
 
 if settings.DEBUG:

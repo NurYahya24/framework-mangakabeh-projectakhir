@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block title %}Order List{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <h1 class="mb-4">{% if is_seller %}Seller Orders{% else %}My Orders{% endif %}</h1>
+
+    <!-- Navigation Tabs -->
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link {% if filter_status == 'Pending' %}active{% endif %}" href="?status=Pending">Pending</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {% if filter_status == 'On Process' %}active{% endif %}" href="?status=On Process">On Process</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {% if filter_status == 'Done' %}active{% endif %}" href="?status=Done">Done</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {% if filter_status == 'Canceled' %}active{% endif %}" href="?status=Canceled">Canceled</a>
+        </li>
+    </ul>
+
+    <!-- Order Table -->
+    <div class="mt-4">
+        {% if orders %}
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    {% if is_seller %}
+                    <th>Buyer</th>
+                    {% else %}
+                    <th>Seller</th>
+                    {% endif %}
+                    <th>Total Price</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                <tr>
+                    <td>{{ order.id }}</td>
+                    {% if is_seller %}
+                    <td>{{ order.user.username }}</td>
+                    {% else %}
+                    <td>{{ order.seller.username }}</td>
+                    {% endif %}
+                    <td>Rp.{{ order.total_price }}</td>
+                    <td>{{ order.status }}</td>
+                    <td>{{ order.created_at|date:"d M Y, H:i" }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>No orders found for this status.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -66,6 +66,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'MangaKabeh.context_processors.navbar',
             ],
         },
     },
@@ -134,9 +135,9 @@ STATICFILES_DIRS = [
 
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
+
 LOGIN_REDIRECT_URL = '/dashboard/'
 LOGIN_URL = '/login'
 LOGOUT_REDIRECT_URL = '/'
 MEDIA_URL = '/media/'  # URL for accessing media files
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # Directory where media files are stored
-

@@ -1,0 +1,101 @@
+{% extends '../base.html' %}
+
+{% block title %}{{ manga.title }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4 mb-3">
+    <div class="card shadow">
+        
+        <div class="card-header d-flex align-items-center justify-content-between">
+            <a href="/"><button type="button" class="btn-close" aria-label="Close"></button></a>
+            <h3 class="m-0 flex-grow-1 text-center">{{ manga.title }}</h3>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <img src="{{ manga.image.url }}" alt="{{ manga.title }}" class="img-fluid rounded">
+                </div>
+                <div class="col-md-8">
+                    <h5 class="card-title">Details</h5>
+                    <p><strong>Genre:</strong> {{ manga.genre.all|join:", " }}</p>
+                    <p><strong>Author:</strong> {{ manga.author }}</p>
+                    <p><strong>Description:</strong></p>
+                    <p>{{ manga.description }}</p>
+                    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#buyNowModal">
+                        <i class="bi bi-cart"></i> Buy Now
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</div>
+
+
+<div class="modal fade" id="buyNowModal" tabindex="-1" aria-labelledby="buyNowModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="buyNowModalLabel">Buy Manga Volumes</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addToCartForm">
+                    <div class="mb-3">
+                        <label for="volumeSelect" class="form-label">Select Volume</label>
+                        <select class="form-select" id="volumeSelect" name="volume_id">
+                            {% for volume in volumes %}
+                            <option value="{{ volume.id }}">
+                                {{ volume }} - Stock: {{ volume.stock }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="quantityInput" class="form-label">Quantity</label>
+                        <input type="number" class="form-control" id="quantityInput" value="1" name="quantity" min="1">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger" id="addToCartButton">Add to Cart</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    document.getElementById("addToCartButton").addEventListener("click", function() {
+    // Get the values from the modal form
+        const volumeId = document.getElementById("volumeSelect").value;
+        const quantity = document.getElementById("quantityInput").value;
+
+        // Send the data to the backend via AJAX
+        fetch("{% url 'add_to_cart' %}", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": '{{ csrf_token }}'
+            },
+            body: JSON.stringify({
+                volume_id: volumeId,
+                quantity: quantity
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert(data.message);
+                // Optionally close the modal here
+                document.getElementById("addToCartForm").reset();
+                $('#buyNowModal').modal('hide');
+            } else {
+                alert("Error: " + data.message);
+            }
+        });
+    });
+</script>
+
+
+
+{% endblock %}
