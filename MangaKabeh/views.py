@@ -435,7 +435,7 @@ def delete_manga(request, manga_id):
         messages.success(request, 'Manga deleted successfully!')
     except Manga.DoesNotExist:
         messages.error(request, 'Manga not found!')
-    return redirect('manga_list')
+    return redirect('dashboard')
 
 @group_required('Seller')
 def delete_manga_seller(request, manga_id):
@@ -449,7 +449,7 @@ def delete_manga_seller(request, manga_id):
             messages.error(request, 'No Permission')
     except Manga.DoesNotExist:
         messages.error(request, 'Manga not found!')
-    return redirect('manga_list')
+    return redirect('dashboard')
 
 def search_manga(request):
     query = request.GET.get('q', '')
