@@ -16,6 +16,7 @@ urlpatterns = [
     #===================ATMIN===========================
     path('admins/dashboard/', views.dashboard_admin, name='dashboard_admin'),
     path('admins/manage_accounts/', views.manage_accounts, name='manage_accounts'),
+    path('admins/add-genre/', views.add_genre, name='add_genre'),
     #===================CUSTOMER========================
     path('customer/add-to-cart/', views.add_to_cart, name='add_to_cart'),
     path('customer/cart', views.view_cart, name='view_cart'),
@@ -32,7 +33,6 @@ urlpatterns = [
     path('login/', auth_views.LoginView.as_view(), name='login'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('register/', views.register, name='register'),
-
     path('search/', views.search_manga, name='search_manga'),
 
 ]

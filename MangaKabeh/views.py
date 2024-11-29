@@ -428,3 +428,14 @@ def search_manga(request):
             Q(genre__name__icontains=query)
         ).distinct()
     return render(request, 'search_results.html', {'query': query, 'results': results})
+
+@user_passes_test(is_superuser)
+def add_genre(request):
+    if request.method == "POST":
+        name = request.POST.get('name')
+        if name:
+            Genre.objects.create(name=name)
+            messages.success(request, "Genre added successfully.")
+        else:
+            messages.error(request, "Genre name cannot be empty.")
+    return redirect('dashboard')

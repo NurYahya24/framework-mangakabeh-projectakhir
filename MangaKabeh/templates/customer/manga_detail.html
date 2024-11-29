@@ -40,30 +40,42 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="addToCartForm">
-                    <div class="mb-3">
-                        <label for="volumeSelect" class="form-label">Select Volume</label>
-                        <select class="form-select" id="volumeSelect" name="volume_id">
-                            {% for volume in volumes %}
-                            <option value="{{ volume.id }}" data-stock="{{ volume.stock }}">
-                                {{ volume }} - Stock: {{ volume.stock }} - Price: Rp.{{ volume.price }}
-                            </option>
-                            {% endfor %}
-                        </select>
+                {% if authenticated and navbar_user_group == 'Customer' %}
+                    <form id="addToCartForm">
+                        <div class="mb-3">
+                            <label for="volumeSelect" class="form-label">Select Volume</label>
+                            <select class="form-select" id="volumeSelect" name="volume_id">
+                                {% for volume in volumes %}
+                                <option value="{{ volume.id }}" data-stock="{{ volume.stock }}">
+                                    {{ volume }} - Stock: {{ volume.stock }} - Price: Rp.{{ volume.price }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="quantityInput" class="form-label">Quantity</label>
+                            <input type="number" class="form-control" id="quantityInput" value="1" name="quantity" min="1">
+                        </div>
+                    </form>
+                {% else %}
+                    <div class="alert alert-warning" role="alert">
+                        You need to log in as a customer to buy manga volumes. 
                     </div>
-                    <div class="mb-3">
-                        <label for="quantityInput" class="form-label">Quantity</label>
-                        <input type="number" class="form-control" id="quantityInput" value="1" name="quantity" min="1">
+                    <div class="text-center">
+                        <a href="{% url 'login' %}" class="btn btn-primary">Login</a>
                     </div>
-                </form>
+                {% endif %}
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="closeModalButton">Close</button>
-                <button type="button" class="btn btn-danger" id="addToCartButton">Add to Cart</button>
-            </div>
+            {% if authenticated and navbar_user_group == 'Customer' %}
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="closeModalButton">Close</button>
+                    <button type="button" class="btn btn-danger" id="addToCartButton">Add to Cart</button>
+                </div>
+            {% endif %}
         </div>
     </div>
 </div>
+
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const volumeSelect = document.getElementById("volumeSelect");
