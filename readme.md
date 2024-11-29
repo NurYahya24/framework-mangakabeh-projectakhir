@@ -1,6 +1,6 @@
 # <p align="center">**MangaKabeh**</p>
 
-
+![Uploading LogoManga.png…]()
 
 Welcome to the **MangaKabeh**! This is a platform where sellers can upload, manage, and sell manga, while customers can browse, purchase, and leave reviews. The admin manages users and content to maintain a seamless experience.
 
