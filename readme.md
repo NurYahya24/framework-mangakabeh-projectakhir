@@ -61,7 +61,7 @@ Selamat datang di **MangaKabeh**! Ini adalah platform tempat penjual dapat mengu
 - Kelola semua daftar manga di platform.  
 
 **Screenshot:**  
-![Admin Dashboard](https://github.com/user-attachments/assets/1325ebdd-f1ed-4c1e-a7bc-70b04bdb11f1)
+![Admin Dashboard](https://github.com/user-attachments/assets/7efb8a00-2779-42f0-8be5-9204077d6215)
 ![Admin Dashboard](https://github.com/user-attachments/assets/d15d0777-9f96-433d-a7ac-55509f7a103d)
 
 ---
