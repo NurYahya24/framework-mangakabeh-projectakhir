@@ -59,7 +59,11 @@ Selamat datang di **MangaKabeh**! Ini adalah platform tempat penjual dapat mengu
 - Kelola manga yang diunggah di bagian "Manage Your Manga Listings".  
 
 **Screenshot:**  
+-Manage Manga:
 ![Seller Dashboard](https://github.com/user-attachments/assets/38326f25-30f1-45a9-9695-99a275bcdc4c)
+
+-Seller Order:
+![Screenshot (2396)](https://github.com/user-attachments/assets/188cfa29-b838-4dda-8b01-7185967d205b)
 
 ---
 
