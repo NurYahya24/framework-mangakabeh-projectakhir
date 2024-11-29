@@ -23,6 +23,7 @@ Selamat datang di **MangaKabeh**! Ini adalah platform tempat penjual dapat mengu
 ### **Untuk Admin**
 - Kelola akun pengguna (aktifkan/nonaktifkan).
 - Monitor dan hapus konten manga yang tidak pantas.
+- Tambah Genre
 
 ---
 
@@ -42,7 +43,15 @@ Selamat datang di **MangaKabeh**! Ini adalah platform tempat penjual dapat mengu
 - Lanjutkan ke checkout untuk menyelesaikan pembelian.  
 
 **Screenshot:**  
-![Customer Dashboard](https://via.placeholder.com/800x400?text=Customer+Dashboard)
+-Home:
+![Home](https://github.com/user-attachments/assets/9d063d69-18d9-42cb-ae3d-2cd383954ed6)
+
+-Cart:
+![Cart](https://github.com/user-attachments/assets/dd92a8ef-67ac-4930-a561-9b12a16e0d36)
+
+-My Order:
+![Order List](https://github.com/user-attachments/assets/57a70d44-bd25-4e77-b040-70370360acd9)
+
 
 ---
 
@@ -51,17 +60,25 @@ Selamat datang di **MangaKabeh**! Ini adalah platform tempat penjual dapat mengu
 - Kelola manga yang diunggah di bagian "Manage Your Manga Listings".  
 
 **Screenshot:**  
+-Manage Manga:
 ![Seller Dashboard](https://github.com/user-attachments/assets/38326f25-30f1-45a9-9695-99a275bcdc4c)
+
+-Seller Order:
+![Screenshot (2396)](https://github.com/user-attachments/assets/188cfa29-b838-4dda-8b01-7185967d205b)
 
 ---
 
 ### **4. Dashboard Admin**
-- Lihat semua pengguna yang terdaftar.  
+- Lihat semua pengguna yang terdaftar.
+- Menambah Genre
 - Aktifkan atau nonaktifkan akun pengguna sesuai kebutuhan.  
 - Kelola semua daftar manga di platform.  
 
 **Screenshot:**  
-![Admin Dashboard](https://github.com/user-attachments/assets/1325ebdd-f1ed-4c1e-a7bc-70b04bdb11f1)
+-Dashboard:
+![Admin Dashboard](https://github.com/user-attachments/assets/7efb8a00-2779-42f0-8be5-9204077d6215)
+
+-Manage Account:
 ![Admin Dashboard](https://github.com/user-attachments/assets/d15d0777-9f96-433d-a7ac-55509f7a103d)
 
 ---
