@@ -52,7 +52,7 @@ class UserRegistrationForm(forms.ModelForm):
     role = forms.ChoiceField(choices=ROLE_CHOICES, widget=forms.RadioSelect)
     address = forms.CharField(widget=forms.Textarea)
     phone_number = forms.CharField(max_length=20)
-    image = forms.ImageField(required=False)
+    image = forms.ImageField()
     
     class Meta:
         model = User
@@ -68,6 +68,6 @@ class UserRegistrationForm(forms.ModelForm):
                 user=user,
                 address=self.cleaned_data['address'],
                 phone_number=self.cleaned_data['phone_number'],
-                picture=self.cleaned_data.get('image')
+                picture=self.cleaned_data['image'],
             )
         return user

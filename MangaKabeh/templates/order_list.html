@@ -23,41 +23,160 @@
     </ul>
 
     <!-- Order Table -->
-    <div class="mt-4">
-        {% if orders %}
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>Order ID</th>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Order ID</th>
+                {% if is_seller %}
+                <th>Buyer</th>
+                {% else %}
+                <th>Seller</th>
+                {% endif %}
+                <th>Total Price</th>
+                <th>Status</th>
+                <th>Date</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in orders %}
+            <tr>
+                <td>{{ order.id }}</td>
+                {% if is_seller %}
+                <td>{{ order.user.username }}</td>
+                {% else %}
+                <td>{{ order.seller.username }}</td>
+                {% endif %}
+                <td>Rp.{{ order.total_price }}</td>
+                <td>{{ order.status }}</td>
+                <td>{{ order.created_at|date:"d M Y, H:i" }}</td>
+                <td>
                     {% if is_seller %}
-                    <th>Buyer</th>
+                        {% if order.payment %}
+                        <button 
+                            class="btn btn-primary view-payment-btn" 
+                            data-bs-toggle="modal" 
+                            data-bs-target="#paymentModal" 
+                            data-image-url="{{ order.payment.url }}"
+                            data-order-id="{{ order.id }}">
+                            View Payment
+                        </button>
+                        {% else %}
+                        <span>No payment uploaded</span>
+                        {% endif %}
                     {% else %}
-                    <th>Seller</th>
+                        {% if order.status == 'Pending' %}
+                            <form method="post" action="{% url 'cancel_order' order.id %}" style="display:inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger">Cancel Order</button>
+                            </form>
+                            {% if order.payment %}
+                            <button 
+                                class="btn btn-primary view-payment-btn" 
+                                data-bs-toggle="modal" 
+                                data-bs-target="#paymentModal" 
+                                data-image-url="{{ order.payment.url }}"
+                                data-order-id="{{ order.id }}">
+                                View Payment
+                            </button>
+                            {% else %}
+                            <form method="post" action="{% url 'upload_payment' order.id %}" enctype="multipart/form-data" style="display:inline;">
+                                {% csrf_token %}
+                                <input type="file" name="payment" accept="image/*" required>
+                                <button type="submit" class="btn btn-primary">Upload Payment</button>
+                            </form>
+                            {% endif %}
+                        {% elif order.status == 'On Process' %}
+                            <form method="post" action="{% url 'done_order' order.id %}" style="display:inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger">Order Recieved</button>
+                            </form>
+                        {% else %}
+                            {% if order.payment %}
+                            <button 
+                                class="btn btn-primary view-payment-btn" 
+                                data-bs-toggle="modal" 
+                                data-bs-target="#paymentModal" 
+                                data-image-url="{{ order.payment.url }}"
+                                data-order-id="{{ order.id }}">
+                                View Payment
+                            </button>
+                            {% else %}
+                                No Payment image found.
+                            {% endif %}
+                        {% endif %}
                     {% endif %}
-                    <th>Total Price</th>
-                    <th>Status</th>
-                    <th>Date</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for order in orders %}
-                <tr>
-                    <td>{{ order.id }}</td>
-                    {% if is_seller %}
-                    <td>{{ order.user.username }}</td>
-                    {% else %}
-                    <td>{{ order.seller.username }}</td>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Single Reusable Modal -->
+    <div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="paymentModalLabel">Payment Proof</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <img id="paymentImage" src="" alt="Payment Proof" class="img-fluid" />
+                </div>
+                <div class="modal-footer">
+                    {% if filter_status == 'Pending' and is_seller %}
+                    <form id="acceptOrderForm" method="post" action="">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-success">Accept Order</button>
+                    </form>
                     {% endif %}
-                    <td>Rp.{{ order.total_price }}</td>
-                    <td>{{ order.status }}</td>
-                    <td>{{ order.created_at|date:"d M Y, H:i" }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        {% else %}
-        <p>No orders found for this status.</p>
-        {% endif %}
+                    {% if filter_status == 'Pending' and not is_seller %}
+                    <form id="deletePhoto" method="post" action="">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-success">Delete Photo</button>
+                    </form>
+                    {% endif %}
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
     </div>
+
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const modal = document.getElementById("paymentModal");
+        const paymentImage = document.getElementById("paymentImage");
+        const acceptOrderForm = document.getElementById("acceptOrderForm");
+        const deletePhoto = document.getElementById("deletePhoto");
+    
+        // Attach click event to all buttons with the 'view-payment-btn' class
+        document.querySelectorAll(".view-payment-btn").forEach((button) => {
+            button.addEventListener("click", function () {
+                const imageUrl = button.getAttribute("data-image-url");
+                const orderId = button.getAttribute("data-order-id");
+    
+                // Update the modal image source
+                if (imageUrl) {
+                    paymentImage.src = imageUrl;
+                } else {
+                    paymentImage.src = ""; // Clear the image if no URL is provided
+                    paymentImage.alt = "No payment proof available";
+                }
+    
+                // Update form actions dynamically
+                if (acceptOrderForm) {
+                    acceptOrderForm.action = `/accept_order/${orderId}/`;
+                }
+                if (deletePhoto) {
+                    deletePhoto.action = `/delete_photo/${orderId}/`;
+                }
+            });
+        });
+    });
+</script>
+
+    
+
 {% endblock %}

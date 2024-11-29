@@ -1,21 +1,51 @@
 {% extends 'base.html' %}
+
 {% block title %}Seller Dashboard{% endblock %}
+
 {% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4">Profile</h1>
 
-<h1>Profile</h1>
-<p>Username: {{ user.username }}</p>
-<p>Email: {{ user.email }}</p>
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h5 class="card-title">Username: {{ user.username }}</h5>
+            <p class="card-text">Email: {{ user.email }}</p>
 
-{% if profile_type == 'Seller' %}
-    <h2>Seller Details</h2>
-    <p>Store Address: {{ profile.address }}</p>
-    <p>Phone Number: {{ profile.phone_number }}</p>
-{% elif profile_type == 'Customer' %}
-    <h2>Customer Details</h2>
-    <p>Address: {{ profile.address }}</p>
-    <p>Phone Number: {{ profile.phone_number }}</p>
-{% else %}
-    <p>No additional details available.</p>
-{% endif %}
-
+            <!-- Profile Details Section -->
+            {% if profile_type == 'Seller' %}
+                <h3 class="mt-4">Seller Details</h3>
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>Store Address:</strong> {{ profile.address }}</p>
+                        <p><strong>Phone Number:</strong> {{ profile.phone_number }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        {% if profile.picture %}
+                            <img src="{{ profile.picture.url }}" alt="Profile Picture" class="img-fluid rounded-circle">
+                        {% else %}
+                            <p>No profile picture available.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            {% elif profile_type == 'Customer' %}
+                <h3 class="mt-4">Customer Details</h3>
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>Address:</strong> {{ profile.address }}</p>
+                        <p><strong>Phone Number:</strong> {{ profile.phone_number }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        {% if profile.picture %}
+                            <img src="{{ profile.picture.url }}" alt="Profile Picture" class="img-fluid rounded-circle">
+                        {% else %}
+                            <p>No profile picture available.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            {% else %}
+                <p>No additional details available.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
 {% endblock %}

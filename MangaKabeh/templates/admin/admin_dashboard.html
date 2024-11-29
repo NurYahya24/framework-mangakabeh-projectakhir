@@ -1,9 +1,34 @@
 {% extends 'base.html' %}
 {% block title %}Admin Dashboard{% endblock %}
 {% block content %}
-    <h1>Admin Panel</h1>
+    <h1>Admin Dashboard</h1>
     <div>
-        <a href="{% url 'manage_users' %}">Manage Users</a>
-        <a href="{% url 'manage_mangas' %}">Manage Mangas</a>
+        <a href="{% url 'manage_accounts' %}">Manage Users</a>
     </div>
+    <h1 class="mb-4">Manage Manga</h1>
+    
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Genre</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for manga in mangas %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ manga.title }}</td>
+                    <td>{{ manga.author }}</td>
+                    <td>{{ manga.genre }}</td>
+                    <td>
+                        <a href="{% url 'delete_manga' manga.id %}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this manga?')">Delete</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}

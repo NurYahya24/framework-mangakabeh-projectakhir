@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Permission Denied</title>
+    <!-- Bootstrap CSS -->
+    {% load django_bootstrap5 %} 
+    {% bootstrap_css %}
+</head>
+<body class="bg-light d-flex align-items-center justify-content-center vh-100">
+    <div class="container text-center">
+        <div class="card shadow-lg">
+            <div class="card-body">
+                <h1 class="display-4 text-danger">403</h1>
+                <h2 class="text-muted">Permission Denied</h2>
+                <p class="lead">You do not have permission to access this resource.</p>
+                <p>It's either your account still waiting for confirmation from the admin, or you were getting banned</p>
+                <a href="/" class="btn btn-primary btn-lg mt-3">Back to Home</a>
+            </div>
+        </div>
+    </div>
+    <!-- Bootstrap JS (Optional) -->
+    {% bootstrap_javascript %}
+</body>
+</html>

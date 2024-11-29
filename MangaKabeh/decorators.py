@@ -7,9 +7,9 @@ def group_required(*group_name):
         @wraps(view_func)
         @login_required
         def _wrapped_view(request, *args, **kwargs):
-            if request.user.groups.filter(name__in=group_name).exists():
+            if request.user.groups.filter(name__in=group_name).exists() and request.user.profile.is_active:
                 return view_func(request, *args, **kwargs)
             else :
-                raise PermissionDenied
+                raise PermissionDenied("Your account is not active. Please contact the admin.")
         return _wrapped_view
     return decorator

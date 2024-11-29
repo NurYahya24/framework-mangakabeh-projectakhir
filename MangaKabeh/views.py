@@ -5,15 +5,19 @@ from django.shortcuts import get_object_or_404, render, redirect
 from .decorators import group_required
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, HttpResponseForbidden
-from .models import Manga, VolumeManga, Genre, Cart, CartItem, Order, OrderItem
+from .models import Manga, VolumeManga, Genre, Cart, CartItem, Order, OrderItem, Profile
 from django.contrib.auth import login
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import Group, User
 from .forms import MangaForm, VolumeFormSet, UserRegistrationForm
+from django.contrib.auth.decorators import user_passes_test
 # Create your views here.
+
+def is_superuser(user):
+    return user.is_superuser
 
 def register(request):
     if request.method == 'POST':
-        form = UserRegistrationForm(request.POST)
+        form = UserRegistrationForm(request.POST, request.FILES)
         if form.is_valid():
             user = form.save()
             
@@ -22,6 +26,9 @@ def register(request):
             group = Group.objects.get(name=group_name)
             group.user_set.add(user)
             login(request, user)
+            user = request.user
+            if role == 'Customer' :
+                user.profile.is_active = True
             return redirect('home')
     else:
         form = UserRegistrationForm()
@@ -30,28 +37,23 @@ def register(request):
 @login_required
 def dashboard(request):
     user = request.user
-    if user.groups.filter(name='Admin').exists():
-        return redirect('dashboard_admin')
-    elif user.groups.filter(name='Seller').exists():
+    if user.groups.filter(name='Seller').exists():
         return redirect('dashboard_seller')
     elif user.groups.filter(name='Customer').exists():
-        return redirect('dashboard_customer')
+        return redirect('home')
     elif user.is_superuser:
-        return redirect('/admin/')
+        return redirect('dashboard_admin')
     return HttpResponseForbidden("You do not have permission to access this page.")
     
-@group_required('Admin')
+@user_passes_test(is_superuser)
 def dashboard_admin(request):
-    return render(request, 'admin/admin_dashboard.html', {})
+    mangas = Manga.objects.all()
+    return render(request, 'admin/admin_dashboard.html', {'mangas': mangas})
 
 @group_required('Seller')
 def dashboard_seller(request):
     mangas = Manga.objects.filter(seller = request.user)
     return render(request, 'seller/seller_dashboard.html', {'mangas': mangas})
-
-@group_required('Customer')
-def dashboard_customer(request):
-    return render(request, 'customer/customer_dashboard.html')
 
 
 
@@ -76,13 +78,14 @@ def add_to_cart(request):
     if request.method == "POST":
         try:
             data = json.loads(request.body)
-            print(data)
             volume_id = data.get("volume_id")
             quantity = int(data.get("quantity", 1))
 
             # Get the volume and seller
             volume = get_object_or_404(VolumeManga, id=volume_id)
             seller = volume.manga.seller  # Assuming VolumeManga has a ForeignKey to Seller
+            if volume.stock < int(quantity):
+                return JsonResponse({"success": False, "message": "Not enough stock available."})
 
             # Get or create a cart for the user
             cart, created = Cart.objects.get_or_create(user=request.user)
@@ -158,12 +161,29 @@ def manga_form_view(request, manga_id=None):
 @login_required
 def profile(request):
     user = request.user
+    
+    # Retrieve the Profile for the logged-in user (if exists)
+    try:
+        profile = Profile.objects.get(user=user)
+    except Profile.DoesNotExist:
+        profile = None
 
-    profile = None
-
+    # Determine the profile type based on some condition, for example, user.role if available
+    # You can also use any logic that works for your app's business rules.
+    profile_type = None
+    if profile:
+        if hasattr(user, 'profile') and profile:
+            if user.profile.is_active:
+                if 'Seller' in user.groups.values_list('name', flat=True):
+                    profile_type = 'Seller'
+                elif 'Customer' in user.groups.values_list('name', flat=True):
+                    profile_type = 'Customer'
+    else:
+        profile_type = 'Unknown'
 
     return render(request, 'profile.html', {
         'profile': profile,
+        'profile_type': profile_type,
     })
 
 
@@ -223,7 +243,7 @@ def remove_cart_item(request):
 
     # If the request method isn't POST, redirect back to the cart
     return redirect('view_cart')
-
+@group_required('Customer')
 def checkout(request, seller_id):
     # Get the cart for the current user
     cart = get_object_or_404(Cart, user=request.user)
@@ -271,7 +291,7 @@ def order_list(request):
     filter_status = request.GET.get('status', 'Pending')
 
     # Check if the user is a seller
-    is_seller = request.user.groups.filter(name='seller').exists()
+    is_seller = request.user.groups.filter(name='Seller').exists()
 
     if is_seller:
         # Filter orders where the seller matches the logged-in user
@@ -285,3 +305,112 @@ def order_list(request):
         'filter_status': filter_status,
         'is_seller': is_seller,
     })
+
+@login_required
+def cancel_order(request, order_id):
+    if request.method == 'POST':
+        order = get_object_or_404(Order, id=order_id, user=request.user)
+        if order.status not in ['Done', 'Canceled']:
+            order.status = 'Canceled'
+            order.save()
+        return redirect('order_list')  # Replace with your order list view name
+    return HttpResponseForbidden()
+
+@login_required
+def upload_payment(request, order_id):
+    if request.method == 'POST' and 'payment' in request.FILES:
+        order = get_object_or_404(Order, id=order_id, user=request.user)
+        if order.status == 'Pending':  # Only allow payment upload for pending orders
+            order.payment = request.FILES['payment']
+            order.save()
+        return redirect('order_list')  # Replace with your order list view name
+    return HttpResponseForbidden()
+
+@login_required
+def delete_photo(request, order_id):
+    # Ensure only the buyer who uploaded the photo can delete it
+    order = get_object_or_404(Order, id=order_id, user=request.user)
+
+    if request.method == "POST":
+        if order.payment:
+            order.payment.delete()  # Deletes the image file from storage
+            order.payment = None   # Remove the reference in the database
+            order.save()
+            messages.success(request, f"Payment proof for Order {order_id} has been deleted.")
+        else:
+            messages.error(request, "No payment proof to delete.")
+    return redirect("order_list")  # Redirect to your order list page
+
+@login_required
+def accept_order(request, order_id):
+    # Ensure only sellers can accept orders
+    order = get_object_or_404(Order, id=order_id, seller=request.user)
+
+    if request.method == "POST":
+        if order.status == "Pending":
+            order.status = "On Process"
+            order.save()
+            messages.success(request, f"Order {order_id} has been accepted.")
+        else:
+            messages.error(request, "Order status is not valid for acceptance.")
+    return redirect("order_list")  # Redirect to your order list page
+
+@login_required
+def done_order(request, order_id):
+    if request.method == 'POST':
+        order = get_object_or_404(Order, id=order_id, user=request.user)
+        if order.status not in ['Done', 'Canceled']:
+            order.status = 'Done'
+            order.save()
+        return redirect('order_list')  # Replace with your order list view name
+    return HttpResponseForbidden()
+
+@user_passes_test(is_superuser)
+def manage_accounts(request):
+    users = User.objects.all()  # List all users
+
+    # Handle activating or deactivating user accounts
+    if request.method == 'POST':
+        user_id = request.POST.get('user_id')
+        action = request.POST.get('action')
+
+        try:
+            user = User.objects.get(id=user_id)
+            profile = user.profile
+            if action == 'activate':
+                profile.is_active = True
+            else:
+                profile.is_active = False
+            profile.save()
+
+            # Optionally redirect to a success message or stay on the same page
+            return redirect('manage_accounts')
+
+        except User.DoesNotExist:
+            pass  # Handle user not found if needed
+
+    return render(request, 'admin/manage_users.html', {'users': users})
+
+@user_passes_test(is_superuser)
+def delete_manga(request, manga_id):
+    try:
+        manga = Manga.objects.get(id=manga_id)
+        manga.delete()
+        messages.success(request, 'Manga deleted successfully!')
+    except Manga.DoesNotExist:
+        messages.error(request, 'Manga not found!')
+    return redirect('manga_list')
+
+@group_required('Seller')
+def delete_manga_seller(request, manga_id):
+    try:
+        manga = Manga.objects.get(id=manga_id)
+        seller = manga.seller
+        if seller == request.user:
+            manga.delete()
+            messages.success(request, 'Manga deleted successfully!')
+        else :
+            messages.error(request, 'No Permission')
+    except Manga.DoesNotExist:
+        messages.error(request, 'Manga not found!')
+    return redirect('manga_list')

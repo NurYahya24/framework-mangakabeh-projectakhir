@@ -45,7 +45,7 @@ class OrderItemInline(admin.TabularInline):
     readonly_fields = ('volume', 'quantity')  # Make fields read-only
 
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user', 'seller', 'total_price', 'status', 'created_at')
+    list_display = ('id', 'user', 'seller', 'total_price', 'status','created_at')
     list_filter = ('status', 'created_at')  # Add filters for status and date
     search_fields = ('user__username', 'seller__username')  # Add search bar for users/sellers
     inlines = [OrderItemInline]  # Show related items in the same form

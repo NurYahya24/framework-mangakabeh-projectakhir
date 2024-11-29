@@ -52,7 +52,13 @@
                         <li class="nav-item">
                             <a class="nav-link {% if request.path == '/customer/cart/' %}active{% endif %}" href="{% url 'view_cart' %}">Cart</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.path == '/profile/' %}active{% endif %}" href="{% url 'profile' %}">Profile</a>
+                        </li>
                     {% elif navbar_user_group == 'Seller' %}
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.path == '/order/' %}active{% endif %}" href="{% url 'order_list' %}">Order List</a>
+                        </li>
                         <li class="nav-item">
                             <a class="nav-link {% if request.path == '/seller/dashboard/' %}active{% endif %}" href="{% url 'dashboard_seller' %}">Dashboard</a>
                         </li>
@@ -61,7 +67,10 @@
                         </li>
                     {% elif navbar_user_group == 'Admin' %}
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Admin Panel</a>
+                            <a class="nav-link" href="/admin/">Admin Panel</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.path == '/admins/dashboard/' %}active{% endif %}" href="{% url 'dashboard_admin' %}">Dashboard</a>
                         </li>
                     {% endif %}
                     <li class="nav-item">

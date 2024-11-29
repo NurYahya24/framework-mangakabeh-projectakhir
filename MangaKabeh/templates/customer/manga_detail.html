@@ -7,7 +7,7 @@
     <div class="card shadow">
         
         <div class="card-header d-flex align-items-center justify-content-between">
-            <a href="/"><button type="button" class="btn-close" aria-label="Close"></button></a>
+            <a href="javascript:history.back()"><button type="button" class="btn-close" aria-label="Close"></button></a>
             <h3 class="m-0 flex-grow-1 text-center">{{ manga.title }}</h3>
         </div>
         <div class="card-body">
@@ -45,8 +45,8 @@
                         <label for="volumeSelect" class="form-label">Select Volume</label>
                         <select class="form-select" id="volumeSelect" name="volume_id">
                             {% for volume in volumes %}
-                            <option value="{{ volume.id }}">
-                                {{ volume }} - Stock: {{ volume.stock }}
+                            <option value="{{ volume.id }}" data-stock="{{ volume.stock }}">
+                                {{ volume }} - Stock: {{ volume.stock }} - Price: Rp.{{ volume.price }}
                             </option>
                             {% endfor %}
                         </select>
@@ -58,43 +58,69 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="closeModalButton">Close</button>
                 <button type="button" class="btn btn-danger" id="addToCartButton">Add to Cart</button>
             </div>
         </div>
     </div>
 </div>
 <script>
-    document.getElementById("addToCartButton").addEventListener("click", function() {
-    // Get the values from the modal form
-        const volumeId = document.getElementById("volumeSelect").value;
-        const quantity = document.getElementById("quantityInput").value;
+    document.addEventListener("DOMContentLoaded", function() {
+        const volumeSelect = document.getElementById("volumeSelect");
+        const quantityInput = document.getElementById("quantityInput");
+        const addToCartButton = document.getElementById("addToCartButton");
 
-        // Send the data to the backend via AJAX
-        fetch("{% url 'add_to_cart' %}", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "X-CSRFToken": '{{ csrf_token }}'
-            },
-            body: JSON.stringify({
-                volume_id: volumeId,
-                quantity: quantity
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert(data.message);
-                // Optionally close the modal here
-                document.getElementById("addToCartForm").reset();
-                $('#buyNowModal').modal('hide');
+        function validateQuantity() {
+            const selectedOption = volumeSelect.options[volumeSelect.selectedIndex];
+            const stock = parseInt(selectedOption.getAttribute("data-stock"), 10);
+            const quantity = parseInt(quantityInput.value, 10);
+
+            if (quantity > stock) {
+                quantityInput.setCustomValidity("Quantity exceeds available stock!");
+                addToCartButton.disabled = true;
             } else {
-                alert("Error: " + data.message);
+                quantityInput.setCustomValidity(""); // Clear error
+                addToCartButton.disabled = false;
             }
+        }
+
+        // Attach validation logic to input events
+        volumeSelect.addEventListener("change", validateQuantity);
+        quantityInput.addEventListener("input", validateQuantity);
+
+        // Add to cart functionality
+        addToCartButton.addEventListener("click", function() {
+            // Get the values from the modal form
+            const volumeId = volumeSelect.value;
+            const quantity = quantityInput.value;
+            const closeButton = document.getElementById("closeModalButton");
+
+            // Send the data to the backend via AJAX
+            fetch("{% url 'add_to_cart' %}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": '{{ csrf_token }}'
+                },
+                body: JSON.stringify({
+                    volume_id: volumeId,
+                    quantity: quantity
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message);
+                    document.getElementById("addToCartForm").reset();
+                    closeButton.click();
+                } else {
+                    alert("Error: " + data.message);
+                }
+            });
         });
     });
 </script>
+
 
 
 

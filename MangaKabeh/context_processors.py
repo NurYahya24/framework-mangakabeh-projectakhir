@@ -2,7 +2,7 @@ def navbar(request):
     user = request.user
     navbar_user_group = None
     if user.is_authenticated:
-        if user.groups.filter(name = 'Admin').exists():
+        if user.is_superuser:
             navbar_user_group = 'Admin'
         elif user.groups.filter(name = 'Customer').exists():
             navbar_user_group = 'Customer'

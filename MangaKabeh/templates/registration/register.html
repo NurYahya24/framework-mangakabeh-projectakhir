@@ -1,5 +1,60 @@
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Register</button>
-</form>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    {% load django_bootstrap5 %}
+    {% bootstrap_css %}
+</head>
+<body>
+    <div class="d-flex justify-content-center align-items-center vh-100">
+        <div class="card shadow-sm p-4" style="width: 100%; max-width: 500px;">
+            <h1 class="text-center mb-4">Register</h1>
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                <!-- Role Selection -->
+                <div class="form-group mb-3">
+                    <label for="role">Role</label>
+                    {{ form.role }}
+                </div>
+
+                <!-- Username and Email Fields (same row) -->
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                        {% bootstrap_field form.username label="Username" %}
+                    </div>
+                    <div class="col-md-6">
+                        {% bootstrap_field form.email label="Email Address" %}
+                    </div>
+                </div>
+
+                <!-- Password Field -->
+                <div class="form-group mb-3">
+                    {% bootstrap_field form.password label="Password" %}
+                </div>
+
+                <!-- Address and Phone Number Fields (same row) -->
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                        {% bootstrap_field form.address label="Address" %}
+                    </div>
+                    <div class="col-md-6">
+                        {% bootstrap_field form.phone_number label="Phone Number" %}
+                    </div>
+                </div>
+
+                <!-- Profile Picture Field -->
+                <div class="form-group mb-3">
+                    {% bootstrap_field form.image label="Profile Picture" %}
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="btn btn-primary w-100">Register</button>
+            </form>
+        </div>
+    </div>   
+</body>
+    {% bootstrap_javascript %}
+</html>

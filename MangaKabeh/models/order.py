@@ -1,7 +1,13 @@
 from django.db import models
 from django.contrib.auth.models import User
 from .manga import VolumeManga
+import os
 
+def upload_payment(instance, filename):
+    ext = os.path.splitext(filename)[1]
+    filename = f"bukti{ext}"
+    sanitized_title = instance.id
+    return f'payment/{sanitized_title}/{filename}'
 
 class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='orders')
@@ -14,6 +20,7 @@ class Order(models.Model):
         ('Canceled', 'Canceled'),
     ))
     created_at = models.DateTimeField(auto_now_add=True)
+    payment = models.ImageField(upload_to=upload_payment, blank=True)
     
 
 class OrderItem(models.Model):
