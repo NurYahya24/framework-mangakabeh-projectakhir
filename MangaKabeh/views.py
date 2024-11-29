@@ -2,6 +2,7 @@ from collections import defaultdict
 import json
 from django.contrib import messages
 from django.shortcuts import get_object_or_404, render, redirect
+import requests
 from .decorators import group_required
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, HttpResponseForbidden
@@ -11,6 +12,8 @@ from django.contrib.auth.models import Group, User
 from .forms import MangaForm, VolumeFormSet, UserRegistrationForm
 from django.contrib.auth.decorators import user_passes_test
 from django.db.models import Q
+from rest_framework import viewsets
+from .serializers import MangaSerializer
 # Create your views here.
 
 def is_superuser(user):
@@ -189,9 +192,18 @@ def profile(request):
 
 
 def manga_detail(request, manga_id):
+    query = manga_id
+    
+    mangaApi = []
+    if query :
+        response = requests.get(f'http://127.0.0.1:8000/api/manga/{query}')
+        if response.status_code == 200:
+            mangaApi = response.json()
+        else :
+            mangaApi = []
     manga = get_object_or_404(Manga, id=manga_id)
     volumes = VolumeManga.objects.filter(manga=manga)
-    return render(request, 'customer/manga_detail.html', {'manga': manga, 'volumes': volumes})
+    return render(request, 'customer/manga_detail.html', {'manga': mangaApi, 'volumes': volumes})
 
 @group_required('Customer')
 def view_cart(request):
@@ -244,6 +256,7 @@ def remove_cart_item(request):
 
     # If the request method isn't POST, redirect back to the cart
     return redirect('view_cart')
+
 @group_required('Customer')
 def checkout(request, seller_id):
     # Get the cart for the current user
@@ -264,17 +277,27 @@ def checkout(request, seller_id):
         user=request.user,
         seller_id=seller_id,
         total_price=total_price,
-        status = 'Pending'
+        status='Pending'
     )
 
-    # Create OrderItems for each CartItem
+    # Create OrderItems for each CartItem and update stock
     for item in cart_items:
-        OrderItem.objects.create(
-            order=order,
-            volume=item.volume,
-            quantity=item.quantity,
-            price = item.volume.price
-        )
+        # Check if there's enough stock
+        if item.volume.stock >= item.quantity:
+            # Decrease stock based on the ordered quantity
+            item.volume.update_stock(item.quantity)
+
+            # Create the corresponding OrderItem
+            OrderItem.objects.create(
+                order=order,
+                volume=item.volume,
+                quantity=item.quantity,
+                price=item.volume.price
+            )
+        else:
+            # If stock is insufficient, notify the user and stop the checkout process
+            messages.error(request, f"Not enough stock for {item.volume.manga.title} volume.")
+            return redirect('view_cart')
 
     # Clear the cart for this seller (delete items after order creation)
     cart_items.delete()
@@ -311,10 +334,22 @@ def order_list(request):
 def cancel_order(request, order_id):
     if request.method == 'POST':
         order = get_object_or_404(Order, id=order_id, user=request.user)
+        
+        # Check if the order is not already completed or canceled
         if order.status not in ['Done', 'Canceled']:
+            # Update order status to 'Canceled'
             order.status = 'Canceled'
+            
+            # Restore the stock for each item in the canceled order
+            for order_item in order.items.all():
+                volume = order_item.volume
+                volume.restock(order_item.quantity)  # Restoring stock
+            
             order.save()
+            messages.success(request, "Your order has been canceled, and stock has been restored.")
+
         return redirect('order_list')  # Replace with your order list view name
+
     return HttpResponseForbidden()
 
 @login_required
@@ -439,3 +474,8 @@ def add_genre(request):
         else:
             messages.error(request, "Genre name cannot be empty.")
     return redirect('dashboard')
+
+#api
+class MangaViewSet(viewsets.ModelViewSet):
+    queryset = Manga.objects.all()
+    serializer_class = MangaSerializer

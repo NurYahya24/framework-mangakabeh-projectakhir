@@ -30,6 +30,16 @@ class VolumeManga(models.Model):
     def __str__(self) -> str:
         return f"{self.manga.title} - Volume {self.volume}"
     
+    def update_stock(self, quantity):
+        """Update the stock after an order."""
+        self.stock -= quantity
+        self.save()
+
+    def restock(self, quantity):
+        """Restock the volume (e.g., when an order is canceled)."""
+        self.stock += quantity
+        self.save()
+    
 class Genre(models.Model):
     name = models.CharField(max_length=100, unique=True)
 

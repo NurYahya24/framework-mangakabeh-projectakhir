@@ -13,11 +13,15 @@
         <div class="card-body p-4">
             <div class="d-flex flex-column flex-lg-row">
                 <div class="mb-4 mb-lg-0 me-lg-4 text-center">
-                    <img src="{{ manga.image.url }}" alt="{{ manga.title }}" class="rounded border" style="width: auto; height: clamp(350px, 27vw, 450px);">
+                    <img src="{{ manga.image }}" alt="{{ manga.title }}" class="rounded border" style="width: auto; height: clamp(350px, 27vw, 450px);">
                 </div>
                 <div class="">
                     <h5 class="card-title">Details</h5>
-                    <p><strong>Genre:</strong> {{ manga.genre.all|join:", " }}</p>
+                    <p><strong>Genre:</strong>
+                        {% for genre in manga.genre %}
+                            {{ genre.name }}{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </p>
                     <p><strong>Author:</strong> {{ manga.author }}</p>
                     <p><strong>Description:</strong></p>
                     <p>{{ manga.description }}</p>

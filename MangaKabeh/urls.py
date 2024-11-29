@@ -1,7 +1,11 @@
 from django.urls import include, path
 from django.contrib.auth import views as auth_views
 from . import views
+from rest_framework.routers import DefaultRouter
+from .views import MangaViewSet
 
+router = DefaultRouter()
+router.register(r'manga', MangaViewSet)
 
 urlpatterns = [
     path('', views.base, name='home'),
@@ -34,6 +38,7 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('register/', views.register, name='register'),
     path('search/', views.search_manga, name='search_manga'),
+    path('api/', include(router.urls)),
 
 ]
 
