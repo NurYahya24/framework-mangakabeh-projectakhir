@@ -25,18 +25,29 @@ def register(request):
         if form.is_valid():
             user = form.save()
             
+            # Create a Profile for the user if it doesn't exist
+            if not hasattr(user, 'profile'):
+                Profile.objects.create(user=user)  # Ensure profile is created
+
+            # Set user role based on registration form data
             role = form.cleaned_data['role']
             group_name = role
             group = Group.objects.get(name=group_name)
             group.user_set.add(user)
+
+            # Log in the user
             login(request, user)
-            user = request.user
-            if role == 'Customer' :
+            
+            # Set profile active if role is 'Customer'
+            if role == 'Customer':
                 user.profile.is_active = True
+                user.profile.save()  # Save the profile changes
+
             return redirect('home')
     else:
         form = UserRegistrationForm()
-    return render(request, 'registration/register.html', {'form':form})
+
+    return render(request, 'registration/register.html', {'form': form})
 
 @login_required
 def dashboard(request):
