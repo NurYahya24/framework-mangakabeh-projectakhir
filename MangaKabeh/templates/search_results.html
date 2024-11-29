@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}Search Results{% endblock %}
+
+{% block content %}
+{% load django_bootstrap5 %} 
+{% bootstrap_css %}
+{% load static %}
+{% load humanize %} <!-- Untuk kasih tanda koma di harga -->
+{% bootstrap_javascript %}
+
+<!-- Search Section -->
+<div class="container my-4">
+    <form action="{% url 'search_manga' %}" method="get">
+        <div class="input-group">
+            <input type="text" name="q" class="form-control" placeholder="Search for manga, author, or genre..." aria-label="Search">
+            <button class="btn btn-primary" type="submit">
+                <i class="bi bi-search"></i>
+            </button>
+        </div>
+    </form>
+</div>
+
+<div class="container-fluid" style="padding: clamp(10px, 2.5vw, 50px);">
+    <h3 style="font-size: clamp(20px, 2vw, 40px); font-weight: bold;">Search Results for "{{ query }}"</h3>
+    <hr/>
+    {% if results %}
+        <div class="container-fluid">
+            <div class="row gx-3 gy-3">
+                {% for manga in results %}
+                <div class="col-6 col-md-4 col-lg-2">
+                    <a href="{% url 'manga_detail' manga.id %}" class="card card-custom" style="padding: 0; background-color: #f5f5f5; text-decoration: none;">
+                        <img class="object-fit-cover" style="height: clamp(150px, 20vw, 250px);" src="{{ manga.image.url }}" alt="{{ manga.title }}">
+                        <div class="card-body" style="padding: 10px;">
+                            <p class="text-truncate" style="font-size: clamp(16px, 1.5vw, 20px); font-weight: bold; margin-bottom: 5px;">{{ manga.title }}</p>
+                            <p class="text-truncate" style="font-size: clamp(12px, 1vw, 14px); margin-bottom: 5px;">By {{ manga.author }}</p>
+                            <p class="text-truncate" style="color: #f22636; font-weight: bold; margin-bottom: 10px; font-size: clamp(16px, 1.5vw, 20px);">
+                                Rp {{ manga.min_price|intcomma }}
+                            </p>
+                            <hr style="margin: 5px 0;" />
+                            <p class="text-truncate" style="margin-bottom: 0; font-size: clamp(12px, 1vw, 14px);">{{ manga.seller.username }}</p>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% else %}
+        <p>No results found for "{{ query }}". Please try different keywords.</p>
+    {% endif %}
+</div>
+{% endblock %}

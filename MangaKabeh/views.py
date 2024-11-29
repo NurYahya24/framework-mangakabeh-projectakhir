@@ -10,6 +10,7 @@ from django.contrib.auth import login
 from django.contrib.auth.models import Group, User
 from .forms import MangaForm, VolumeFormSet, UserRegistrationForm
 from django.contrib.auth.decorators import user_passes_test
+from django.db.models import Q
 # Create your views here.
 
 def is_superuser(user):
@@ -414,3 +415,16 @@ def delete_manga_seller(request, manga_id):
     except Manga.DoesNotExist:
         messages.error(request, 'Manga not found!')
     return redirect('manga_list')
+
+def search_manga(request):
+    query = request.GET.get('q', '')
+    results = []
+    if query:
+        results = Manga.objects.annotate(
+            min_price=Min('volumemanga__price')  # Anotasi harga minimum
+        ).filter(
+            Q(title__icontains=query) |
+            Q(author__icontains=query) |
+            Q(genre__name__icontains=query)
+        ).distinct()
+    return render(request, 'search_results.html', {'query': query, 'results': results})

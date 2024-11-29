@@ -29,27 +29,40 @@
     <div class="container-fluid" style="margin: 0; padding: 0;">
     {% block content %}
         
-        <!-- Slider -->
-        <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
-            <div class="carousel-inner" style="width: 100%; height: auto;">
-                <div class="carousel-item active">
-                    <img src="{% static 'Images/Slide1.png' %}" class="d-block w-100" alt="...">
-                </div>
-                <div class="carousel-item">
-                    <img src="{% static 'Images/Slide2.png' %}" class="d-block w-100" alt="...">
-                </div>
+    <!-- Slider -->
+    <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner" style="width: 100%; height: auto;">
+            <div class="carousel-item active">
+                <img src="{% static 'Images/Slide1.png' %}" class="d-block w-100" alt="...">
             </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
-            </button>
+            <div class="carousel-item">
+                <img src="{% static 'Images/Slide2.png' %}" class="d-block w-100" alt="...">
+            </div>
         </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
 
-      <div class="container-fluid" style="padding: clamp(10px, 2.5vw, 50px);;">
+    <!-- Search Section -->
+    <div class="container mt-5">
+        <form action="{% url 'search_manga' %}" method="get">
+            <div class="input-group">
+                <input type="text" name="q" class="form-control" placeholder="Search for manga, author, or genre..." aria-label="Search">
+                <button class="btn btn-primary" type="submit">
+                    <i class="bi bi-search"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+
+
+      <div class="container-fluid" style="padding: clamp(10px, 2.5vw, 50px);">
         <p style="font-size: clamp(20px, 2vw, 40px); font-weight: bold;">New Arrivals</p>
         <hr/>
         <div class="container-fluid">
