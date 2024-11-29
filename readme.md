@@ -1,6 +1,4 @@
-<p align="center">
-  **MangaKabeh**
-</p>
+# <p align="center">**MangaKabeh**</p>
 
 
 
