@@ -219,7 +219,7 @@ def manga_detail(request, manga_id):
 @group_required('Customer')
 def view_cart(request):
     # Get the user's cart or return a 404 if not found
-    cart = get_object_or_404(Cart, user=request.user)
+    cart = Cart.objects.filter(user=request.user).first()
     cart_items = CartItem.objects.filter(cart=cart)
 
     # Group items by seller
