@@ -1,8 +1,6 @@
 # <p align="center">**MangaKabeh**</p>
 
-<p align="center">
-  ![LogoManga](https://github.com/user-attachments/assets/7dc4f1d2-d5f9-43a6-9e76-c8ddfdbda7fd)
-</p>
+<p align="center">![LogoManga](https://github.com/user-attachments/assets/7dc4f1d2-d5f9-43a6-9e76-c8ddfdbda7fd)</p>
 
 
 Welcome to the **MangaKabeh**! This is a platform where sellers can upload, manage, and sell manga, while customers can browse, purchase, and leave reviews. The admin manages users and content to maintain a seamless experience.
