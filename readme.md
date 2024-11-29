@@ -42,7 +42,11 @@ Selamat datang di **MangaKabeh**! Ini adalah platform tempat penjual dapat mengu
 - Lanjutkan ke checkout untuk menyelesaikan pembelian.  
 
 **Screenshot:**  
-![Customer Dashboard](https://github.com/user-attachments/assets/9d063d69-18d9-42cb-ae3d-2cd383954ed6)
+-Home:
+![Home](https://github.com/user-attachments/assets/9d063d69-18d9-42cb-ae3d-2cd383954ed6)
+
+-Cart:
+![Cart](https://github.com/user-attachments/assets/dd92a8ef-67ac-4930-a561-9b12a16e0d36)
 
 ---
 
