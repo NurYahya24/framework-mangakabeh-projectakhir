@@ -23,6 +23,7 @@ Selamat datang di **MangaKabeh**! Ini adalah platform tempat penjual dapat mengu
 ### **Untuk Admin**
 - Kelola akun pengguna (aktifkan/nonaktifkan).
 - Monitor dan hapus konten manga yang tidak pantas.
+- Tambah Genre
 
 ---
 
@@ -68,7 +69,8 @@ Selamat datang di **MangaKabeh**! Ini adalah platform tempat penjual dapat mengu
 ---
 
 ### **4. Dashboard Admin**
-- Lihat semua pengguna yang terdaftar.  
+- Lihat semua pengguna yang terdaftar.
+- Menambah Genre
 - Aktifkan atau nonaktifkan akun pengguna sesuai kebutuhan.  
 - Kelola semua daftar manga di platform.  
 
