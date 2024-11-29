@@ -3,48 +3,48 @@
 {% block title %}Seller Dashboard{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-    <h1 class="mb-4">Profile</h1>
+<div class="container d-flex align-items-center justify-content-center" style="padding: clamp(10px, 2.5vw, 50px);">
 
-    <div class="card shadow-sm">
+    <div class="card shadow-sm" style="background-color: #f5f5f5; width: 800px;">
         <div class="card-body">
-            <h5 class="card-title">Username: {{ user.username }}</h5>
-            <p class="card-text">Email: {{ user.email }}</p>
-
-            <!-- Profile Details Section -->
-            {% if profile_type == 'Seller' %}
-                <h3 class="mt-4">Seller Details</h3>
-                <div class="row">
-                    <div class="col-md-6">
-                        <p><strong>Store Address:</strong> {{ profile.address }}</p>
-                        <p><strong>Phone Number:</strong> {{ profile.phone_number }}</p>
-                    </div>
-                    <div class="col-md-6">
-                        {% if profile.picture %}
-                            <img src="{{ profile.picture.url }}" alt="Profile Picture" class="img-fluid rounded-circle">
-                        {% else %}
-                            <p>No profile picture available.</p>
-                        {% endif %}
-                    </div>
+            <h1 class="mb-4 text-center border-bottom">Profile</h1>
+            <!-- Username and Email Section -->
+            <div class="d-flex flex-column flex-lg-row align-items-center p-4 rounded justify-content-center text-center">
+                <div class="col-md-4">
+                    {% if profile.picture %}
+                        <img src="{{ profile.picture.url }}" alt="Profile Picture" class="img-fluid" style="width: 250px; height: 250px; border-radius: 100%;">
+                    {% else %}
+                        <p>No profile picture available.</p>
+                    {% endif %}
                 </div>
-            {% elif profile_type == 'Customer' %}
-                <h3 class="mt-4">Customer Details</h3>
                 <div class="row">
-                    <div class="col-md-6">
-                        <p><strong>Address:</strong> {{ profile.address }}</p>
-                        <p><strong>Phone Number:</strong> {{ profile.phone_number }}</p>
+                    <div>
+                        <p><strong class="d-block">Username:</strong> {{ user.username }}</p>
+                        <p><strong class="d-block">Email:</strong> {{ user.email }}</p>
                     </div>
-                    <div class="col-md-6">
-                        {% if profile.picture %}
-                            <img src="{{ profile.picture.url }}" alt="Profile Picture" class="img-fluid rounded-circle">
-                        {% else %}
-                            <p>No profile picture available.</p>
-                        {% endif %}
-                    </div>
+                    <!-- Profile Details Section -->
+                    {% if profile_type == 'Seller' %}
+                        <!-- <h3 class="mt-4">Seller Details</h3> -->
+                        <div class="">
+                            <div class="">
+                                <p><strong class="d-block">Store Address:</strong> {{ profile.address }}</p>
+                                <p><strong class="d-block">Phone Number:</strong> {{ profile.phone_number }}</p>
+                            </div>
+                        </div>
+                    {% elif profile_type == 'Customer' %}
+                        <!-- <h3 class="mt-4">Customer Details</h3> -->
+                        <div class="">
+                            <div class="">
+                                <p><strong class="d-block">Address:</strong> {{ profile.address }}</p>
+                                <p><strong class="d-block">Phone Number:</strong> {{ profile.phone_number }}</p>
+                            </div>
+                        </div>
+                    {% else %}
+                        <p>No additional details available.</p>
+                    {% endif %}
+                    
                 </div>
-            {% else %}
-                <p>No additional details available.</p>
-            {% endif %}
+            </div>
         </div>
     </div>
 </div>

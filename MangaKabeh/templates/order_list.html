@@ -69,7 +69,7 @@
                             {% if order.status == 'Pending' %}
                                 <form method="post" action="{% url 'cancel_order' order.id %}" style="display:inline;">
                                     {% csrf_token %}
-                                    <button type="submit" class="btn btn-danger">Cancel Order</button>
+                                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to cancel this order?')">Cancel Order</button>
                                 </form>
                                 {% if order.payment %}
                                 <button 
