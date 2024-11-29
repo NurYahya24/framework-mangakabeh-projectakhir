@@ -37,30 +37,31 @@ Selamat datang di **MangaKabeh**! Ini adalah platform tempat penjual dapat mengu
 
 ---
 
-### **2. Customer Dashboard**
-- Browse through manga and add them to your cart.  
-- Proceed to checkout to complete your purchase.  
+### **2. Dashboard Pelanggan**
+- Telusuri manga dan tambahkan ke keranjang Anda.  
+- Lanjutkan ke checkout untuk menyelesaikan pembelian.  
 
 **Screenshot:**  
 ![Customer Dashboard](https://via.placeholder.com/800x400?text=Customer+Dashboard)
 
 ---
 
-### **3. Seller Dashboard**
-- Upload manga with details like title, author, price, and an image.  
-- Manage your uploaded manga in the "My Listings" section.  
+### **3. Dashboard Penjual**
+- Unggah manga dengan detail seperti judul, pengarang, harga, dan gambar.  
+- Kelola manga yang diunggah di bagian "Manage Your Manga Listings".  
 
 **Screenshot:**  
-![Seller Dashboard](https://via.placeholder.com/800x400?text=Seller+Dashboard)
+![Seller Dashboard](https://github.com/user-attachments/assets/38326f25-30f1-45a9-9695-99a275bcdc4c)
 
 ---
 
-### **4. Admin Panel**
-- View all registered users.  
-- Activate or deactivate user accounts as needed.  
-- Manage all manga listings on the platform.  
+### **4. Dashboard Admin**
+- Lihat semua pengguna yang terdaftar.  
+- Aktifkan atau nonaktifkan akun pengguna sesuai kebutuhan.  
+- Kelola semua daftar manga di platform.  
 
 **Screenshot:**  
-![Admin Panel](https://via.placeholder.com/800x400?text=Admin+Panel)
+![Admin Dashboard](https://github.com/user-attachments/assets/1325ebdd-f1ed-4c1e-a7bc-70b04bdb11f1)
+![Admin Dashboard](https://github.com/user-attachments/assets/d15d0777-9f96-433d-a7ac-55509f7a103d)
 
 ---
