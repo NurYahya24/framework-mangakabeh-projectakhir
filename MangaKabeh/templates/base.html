@@ -13,7 +13,13 @@
     {% load static %}
     {% load humanize %} <!-- Untuk kasih tanda koma di harga -->
     {% bootstrap_javascript %}
+    <style>
+        .card-custom:hover {
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Menambahkan bayangan */
+            transform: translateY(-5px); /* Sedikit mengangkat kartu */
+        }
 
+    </style>
 </head>
 <body>
     <!-- Navbar -->
@@ -49,21 +55,19 @@
         <div class="container-fluid">
             <div class="row justify-content-center gx-3 gy-3">
                 {% for manga in mangas|slice:":6" %}
-                <div class="col-6 col-sm-4 col-md-4 col-lg-2">
-                    <div class="card" style="padding: 0; background-color: #f5f5f5;">
-                        <img style="height: clamp(150px, 20vw, 250px); object-fit: cover;" src="{{ manga.image.url }}" class="card-img-top" alt="{{ manga.title }}">
+                <div class="col-6 col-md-4 col-lg-2">
+                    <a href="{% url 'manga_detail' manga.id %}" class="card card-custom" style="padding: 0; background-color: #f5f5f5; text-decoration: none;">
+                        <img class="object-fit-cover" style="height: clamp(150px, 20vw, 250px);" src="{{ manga.image.url }}" alt="{{ manga.title }}">
                         <div class="card-body" style="padding: 10px;">
-                            <a href="{% url 'manga_detail' manga.id %}">
-                                <p class="text-truncate" style="font-size: clamp(16px, 1.5vw, 20px); font-weight: bold; margin-bottom: 5px;">{{ manga.title }}</p>
-                            </a>
-                            <p style="font-size: clamp(12px, 1vw, 14px); margin-bottom: 5px;">By {{ manga.author }}</p>
-                            <p style="color: #ff9aa2; font-weight: bold; margin-bottom: 10px; font-size: clamp(16px, 1.5vw, 20px);">
+                            <p class="text-truncate" style="font-size: clamp(16px, 1.5vw, 20px); font-weight: bold; margin-bottom: 5px;">{{ manga.title }}</p>
+                            <p class="text-truncate" style="font-size: clamp(12px, 1vw, 14px); margin-bottom: 5px;">By {{ manga.author }}</p>
+                            <p class="text-truncate" style="color: #f22636; font-weight: bold; margin-bottom: 10px; font-size: clamp(16px, 1.5vw, 20px);">
                                 Rp {{ manga.min_price|intcomma }}
                             </p>
                             <hr style="margin: 5px 0;" />
-                            <p style="margin-bottom: 0; font-size: clamp(12px, 1vw, 14px);">{{ manga.seller.username }}</p>
+                            <p class="text-truncate" style="margin-bottom: 0; font-size: clamp(12px, 1vw, 14px);">{{ manga.seller.username }}</p>
                         </div>
-                    </div>
+                    </a>
                 </div>
                 {% empty %}
                     <p>No manga available right now. Check back later!</p>
@@ -72,24 +76,24 @@
         </div>
 
         <!-- Genre Aksi -->
-        <p style="font-size: clamp(20px, 2vw, 40px); font-weight: bold; margin-top: 40px;">Aksi</p>
+        <p style="font-size: clamp(20px, 2vw, 40px); font-weight: bold; margin-top: 40px;">Action</p>
         <hr />
         <div class="container-fluid">
             <div class="row justify-content-center gx-3 gy-3">
                 {% for manga in genre_aksi %}
-                <div class="col-6 col-sm-4 col-md-4 col-lg-2">
-                    <div class="card" style="padding: 0; background-color: #f5f5f5;">
-                        <img style="height: clamp(150px, 20vw, 250px); object-fit: cover;" src="{{ manga.image.url }}" class="card-img-top" alt="{{ manga.title }}">
+                <div class="col-6 col-md-4 col-lg-2">
+                    <a href="{% url 'manga_detail' manga.id %}" class="card card-custom" style="padding: 0; background-color: #f5f5f5; text-decoration: none;">
+                        <img class="object-fit-cover" style="height: clamp(150px, 20vw, 250px);" src="{{ manga.image.url }}" alt="{{ manga.title }}">
                         <div class="card-body" style="padding: 10px;">
-                            <a href="{% url 'manga_detail' manga.id %}">
-                                <p class="text-truncate" style="font-size: clamp(16px, 1.5vw, 20px); font-weight: bold; margin-bottom: 5px;">{{ manga.title }}</p>
-                            </a>
-                            <p style="font-size: clamp(12px, 1vw, 14px); margin-bottom: 5px;">By {{ manga.author }}</p>
-                            <p style="color: #ff9aa2; font-weight: bold; margin-bottom: 10px; font-size: clamp(16px, 1.5vw, 20px);">
+                            <p class="text-truncate" style="font-size: clamp(16px, 1.5vw, 20px); font-weight: bold; margin-bottom: 5px;">{{ manga.title }}</p>
+                            <p class="text-truncate" style="font-size: clamp(12px, 1vw, 14px); margin-bottom: 5px;">By {{ manga.author }}</p>
+                            <p class="text-truncate" style="color: #f22636; font-weight: bold; margin-bottom: 10px; font-size: clamp(16px, 1.5vw, 20px);">
                                 Rp {{ manga.min_price|intcomma }}
                             </p>
+                            <hr style="margin: 5px 0;" />
+                            <p class="text-truncate" style="margin-bottom: 0; font-size: clamp(12px, 1vw, 14px);">{{ manga.seller.username }}</p>
                         </div>
-                    </div>
+                    </a>
                 </div>
                 {% empty %}
                     <p>No manga available in this genre right now. Check back later!</p>
@@ -103,19 +107,19 @@
         <div class="container-fluid">
             <div class="row justify-content-center gx-3 gy-3">
                 {% for manga in genre_drama %}
-                <div class="col-6 col-sm-4 col-md-4 col-lg-2">
-                    <div class="card" style="padding: 0; background-color: #f5f5f5;">
-                        <img style="height: clamp(150px, 20vw, 250px); object-fit: cover;" src="{{ manga.image.url }}" class="card-img-top" alt="{{ manga.title }}">
+                <div class="col-6 col-md-4 col-lg-2">
+                    <a href="{% url 'manga_detail' manga.id %}" class="card card-custom" style="padding: 0; background-color: #f5f5f5; text-decoration: none;">
+                        <img class="object-fit-cover" style="height: clamp(150px, 20vw, 250px);" src="{{ manga.image.url }}" alt="{{ manga.title }}">
                         <div class="card-body" style="padding: 10px;">
-                            <a href="{% url 'manga_detail' manga.id %}">
-                                <p class="text-truncate" style="font-size: clamp(16px, 1.5vw, 20px); font-weight: bold; margin-bottom: 5px;">{{ manga.title }}</p>
-                            </a>
-                            <p style="font-size: clamp(12px, 1vw, 14px); margin-bottom: 5px;">By {{ manga.author }}</p>
-                            <p style="color: #ff9aa2; font-weight: bold; margin-bottom: 10px; font-size: clamp(16px, 1.5vw, 20px);">
+                            <p class="text-truncate" style="font-size: clamp(16px, 1.5vw, 20px); font-weight: bold; margin-bottom: 5px;">{{ manga.title }}</p>
+                            <p class="text-truncate" style="font-size: clamp(12px, 1vw, 14px); margin-bottom: 5px;">By {{ manga.author }}</p>
+                            <p class="text-truncate" style="color: #f22636; font-weight: bold; margin-bottom: 10px; font-size: clamp(16px, 1.5vw, 20px);">
                                 Rp {{ manga.min_price|intcomma }}
                             </p>
+                            <hr style="margin: 5px 0;" />
+                            <p class="text-truncate" style="margin-bottom: 0; font-size: clamp(12px, 1vw, 14px);">{{ manga.seller.username }}</p>
                         </div>
-                    </div>
+                    </a>
                 </div>
                 {% empty %}
                     <p>No manga available in this genre right now. Check back later!</p>

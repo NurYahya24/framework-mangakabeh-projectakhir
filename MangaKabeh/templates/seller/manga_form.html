@@ -4,7 +4,7 @@
 <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
     {% csrf_token %}
     <div class="mb-4">
-        <h3 class="text-center">Manga Form</h3>
+        <h3 class="text-center my-4 fw-bold">Manga Form</h3>
         <div class="card shadow p-4">
             <div class="row g-4">
                 {% for field in form %}
@@ -29,37 +29,39 @@
     
 
     <h3>Manga Volume(s)</h3>
-    <table id="volume-formset" class="table table-striped table-bordered">
-        <thead>
-            <tr>
-                <th>Volume</th>
-                <th>Stock</th>
-                <th>Price</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody class="form-group">
-            {{ volume_formset.management_form }}
-            {% for vol in volume_formset %}
-            <tr class="volume-form">
-                <td>
-                    {{ vol.volume }}
-                </td>
-                <td>
-                    {{ vol.stock }}
-                </td>
-                <td>
-                    {{ vol.price }}
-                </td>
-                <td>
-                    {{ vol.id.as_hidden }}
-                    {{ vol.DELETE.as_hidden }}
-                    <button type="button" class="remove-volume btn btn-danger">Remove</button>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <div style="overflow-x: auto;">
+        <table id="volume-formset" class="table table-striped table-bordered" style="width: 100%;">
+            <thead>
+                <tr>
+                    <th>Volume</th>
+                    <th>Stock</th>
+                    <th>Price</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody class="form-group">
+                {{ volume_formset.management_form }}
+                {% for vol in volume_formset %}
+                <tr class="volume-form">
+                    <td>
+                        {{ vol.volume }}
+                    </td>
+                    <td>
+                        {{ vol.stock }}
+                    </td>
+                    <td>
+                        {{ vol.price }}
+                    </td>
+                    <td>
+                        {{ vol.id.as_hidden }}
+                        {{ vol.DELETE.as_hidden }}
+                        <button type="button" class="remove-volume btn btn-danger">Remove</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
     <div class="d-flex my-5 mx-3">
         <button type="button" id="add-volume" class="btn btn-secondary me-3">Add Volume</button>

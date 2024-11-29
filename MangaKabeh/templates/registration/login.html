@@ -3,90 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
     {% load django_bootstrap5 %} 
     {% bootstrap_css %}
+    {% load widget_tweaks %}
     <title>Login</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            height: 100vh;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: #f4f4f4;
-        }
-
-        .login-container {
-            background-color: #ffffff;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 400px;
-        }
-
-        h1 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        button {
-            background-color: #00ADB5;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            font-size: 16px;
-            width: 100%;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: #007d7d;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-        }
-
-        .form-group input {
-            width: 100%;
+        .input-login input {
+            width: clamp(250px, 20vw, 300px);
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
             font-size: 14px;
+            margin-bottom: 24px;
         }
 
-        .form-group input:focus {
-            border-color: #00ADB5;
-            outline: none;
+        .btn-custom {
+            width: 100%;
+            color: white;
+            background-color: #f22636;
+            border: none;
+        }
+        .container-utama {
+            min-height: 100vh;
         }
     </style>
 </head>
-<body>
-    <div class="login-container">
-        <h1>Login</h1>
-        <form method="post">
-            {% csrf_token %}
-            <div class="form-group">
-                {{ form.username.label_tag }}
-                {{ form.username }}
+<body style="background-color: #f4f4f4;">
+    <div class="d-flex align-items-center justify-content-center container-utama">
+        <div class="d-flex flex-column flex-lg-row align-items-center p-4 rounded justify-content-center shadow" style="background-color: #ffffff;">
+            <div class="d-flex justify-content-center">
+                <img class="me-lg-4" src="{% static 'Images/LogoManga.png' %}" alt="Logo" style="height: clamp(150px, 20vw, 300px); width: clamp(150px, 20vw, 300px)">
             </div>
-            <div class="form-group">
-                {{ form.password.label_tag }}
-                {{ form.password }}
+            <div>
+                <h1 class="text-center mb-4" style="color: #f22636; font-weight: bold;">Login</h1>
+                <form method="post">
+                    {% csrf_token %}
+                    <!-- <div class="">
+                        <div class="mb-3">
+                            <label for="id_email" class="form-label fw-bold">Username</label>
+                            {{ form.username|add_class:"form-control" }}
+                        </div>
+                    </div> -->
+                    <div class="mb-3 input-login">
+                        <label class="form-label fw-bold">Username</label>
+                        {{ form.username|add_class:"form-control" }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Password</label>
+                        {{ form.password|add_class:"form-control" }}
+                    </div>
+
+                    <!-- <div class="form-group">
+                        <div class="d-block fw-bold">
+                            {{ form.username.label_tag }}
+                        </div>
+                        {{ form.username }}
+                    </div>
+                    <div class="form-group fw-bold">
+                        <div class="d-block">
+                            {{ form.password.label_tag }}
+                        </div>
+                        {{ form.password }}
+                    </div> -->
+                    <button class="btn btn-danger btn-custom" style="width: 100%;" type="submit">Login</button>
+                    <p class="text-center mt-4">
+                        New here? <a href="{% url 'register' %}" style="text-decoration: none;">Create an account!</a>
+                    </p>
+                </form>
             </div>
-            <div class="text-center mt-3">
-                <p>Don't have an account? <a href="{% url 'register' %}" class="text-primary">Register here</a></p>
-            </div>
-            <button type="submit">Login</button>
-        </form>
+        </div>
+
     </div>
 </body>
 {% bootstrap_javascript %}

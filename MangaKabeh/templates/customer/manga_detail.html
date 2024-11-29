@@ -10,12 +10,12 @@
             <a href="javascript:history.back()"><button type="button" class="btn-close" aria-label="Close"></button></a>
             <h3 class="m-0 flex-grow-1 text-center">{{ manga.title }}</h3>
         </div>
-        <div class="card-body">
-            <div class="row">
-                <div class="col-md-4">
-                    <img src="{{ manga.image.url }}" alt="{{ manga.title }}" class="img-fluid rounded">
+        <div class="card-body p-4">
+            <div class="d-flex flex-column flex-lg-row">
+                <div class="mb-4 mb-lg-0 me-lg-4 text-center">
+                    <img src="{{ manga.image.url }}" alt="{{ manga.title }}" class="rounded border" style="width: auto; height: clamp(350px, 27vw, 450px);">
                 </div>
-                <div class="col-md-8">
+                <div class="">
                     <h5 class="card-title">Details</h5>
                     <p><strong>Genre:</strong> {{ manga.genre.all|join:", " }}</p>
                     <p><strong>Author:</strong> {{ manga.author }}</p>

@@ -1,34 +1,41 @@
 {% extends 'base.html' %}
 {% block title %}Admin Dashboard{% endblock %}
 {% block content %}
-    <h1>Admin Dashboard</h1>
-    <div>
-        <a href="{% url 'manage_accounts' %}">Manage Users</a>
+<div class="container-fluid">
+    <h1 class="mt-4">Admin Dashboard</h1>
+    <div class="my-4">
+        <a href="{% url 'manage_accounts' %}" class="btn btn-primary d-inline-flex align-items-center">
+            <i class="bi bi-pencil me-2"></i>
+            Manage Users
+        </a>
     </div>
-    <h1 class="mb-4">Manage Manga</h1>
     
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Title</th>
-                <th>Author</th>
-                <th>Genre</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for manga in mangas %}
+    <h1 class="mb-4">Manage Manga</h1>
+    <div style="overflow-x: auto;">
+        <table class="table table-striped table-bordered" style="width: 100%;">
+            <thead>
                 <tr>
-                    <td>{{ forloop.counter }}</td>
-                    <td>{{ manga.title }}</td>
-                    <td>{{ manga.author }}</td>
-                    <td>{{ manga.genre }}</td>
-                    <td>
-                        <a href="{% url 'delete_manga' manga.id %}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this manga?')">Delete</a>
-                    </td>
+                    <th class="text-center">No</th>
+                    <th class="text-center">Title</th>
+                    <th class="text-center">Author</th>
+                    <th class="text-center">Genre</th>
+                    <th class="text-center">Action</th>
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                {% for manga in mangas %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ manga.title }}</td>
+                        <td>{{ manga.author }}</td>
+                        <td>{{ manga.genre }}</td>
+                        <td class="d-flex justify-content-center">
+                            <a href="{% url 'delete_manga' manga.id %}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this manga?')">Delete</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 {% endblock %}

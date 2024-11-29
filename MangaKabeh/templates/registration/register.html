@@ -4,57 +4,110 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
+    {% load static %}
     {% load django_bootstrap5 %}
     {% bootstrap_css %}
-</head>
-<body>
-    <div class="d-flex justify-content-center align-items-center vh-100">
-        <div class="card shadow-sm p-4" style="width: 100%; max-width: 500px;">
-            <h1 class="text-center mb-4">Register</h1>
-            <form method="post" enctype="multipart/form-data">
-                {% csrf_token %}
-                
-                <!-- Role Selection -->
-                <div class="form-group mb-3">
-                    <label for="role">Role</label>
-                    {{ form.role }}
-                </div>
-
-                <!-- Username and Email Fields (same row) -->
-                <div class="row g-3 mb-3">
-                    <div class="col-md-6">
-                        {% bootstrap_field form.username label="Username" %}
-                    </div>
-                    <div class="col-md-6">
-                        {% bootstrap_field form.email label="Email Address" %}
-                    </div>
-                </div>
-
-                <!-- Password Field -->
-                <div class="form-group mb-3">
-                    {% bootstrap_field form.password label="Password" %}
-                </div>
-
-                <!-- Address and Phone Number Fields (same row) -->
-                <div class="row g-3 mb-3">
-                    <div class="col-md-6">
-                        {% bootstrap_field form.address label="Address" %}
-                    </div>
-                    <div class="col-md-6">
-                        {% bootstrap_field form.phone_number label="Phone Number" %}
-                    </div>
-                </div>
-
-                <!-- Profile Picture Field -->
-                <div class="form-group mb-3">
-                    {% bootstrap_field form.image label="Profile Picture" %}
-                </div>
-
-                <!-- Submit Button -->
-                <button type="submit" class="btn btn-primary w-100">Register</button>
-            </form>
-        </div>
-    </div>   
-</body>
     {% bootstrap_javascript %}
+    {% load widget_tweaks %}
+
+    <style>
+        .btn-custom {
+            width: 100%;
+            color: white;
+            background-color: #f22636;
+            border: none;
+        }
+
+        /* .btn-custom:hover {
+            color: white;
+            background-color: #ff6b81;
+        } */
+
+        .container-utama {
+            min-height: 100vh;
+        }
+
+        
+    </style>
+</head>
+<body style="background-color: #f4f4f4;">
+    <div class="d-flex align-items-center justify-content-center container-utama">
+        <div class="d-flex flex-column flex-lg-row align-items-center p-4 rounded justify-content-center shadow" style="background-color: #ffffff; width: clamp(360px, 55vw, 1000px);">
+            <div class="d-flex justify-content-center">
+                <img class="me-lg-4" src="{% static 'Images/LogoManga.png' %}" alt="Logo" style="height: clamp(150px, 20vw, 300px); width: clamp(150px, 20vw, 300px)">
+            </div>
+            <div>
+                <h1 class="text-center mb-4" style="color: #f22636; font-weight: bold;">Registration</h1>
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="mb-4">
+                        <div class="row g-10">
+                            <!-- Username -->
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="id_username" class="form-label fw-bold">Username</label>
+                                    {{ form.username|add_class:"form-control" }}
+                                </div>
+                            </div>
+                            
+                            <!-- Email Address -->
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="id_email" class="form-label fw-bold">Email Address</label>
+                                    {{ form.email|add_class:"form-control" }}
+                                </div>
+                            </div>
+                            
+                            <!-- Phone Number -->
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="id_phone_number" class="form-label fw-bold">Phone Number</label>
+                                    {{ form.phone_number|add_class:"form-control" }}
+                                </div>
+                            </div>
+                            
+                            <!-- Address -->
+                            <div class="col-md-6 tes-123">
+                                <div class="mb-3">
+                                    <label for="id_address" class="form-label fw-bold">Address</label>
+                                    {{ form.address|add_class:"form-control" }}
+                                </div>
+                            </div>
+                            
+
+                            <!-- Role -->
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="id_role" class="form-label fw-bold d-block">Role</label>
+                                    {{ form.role|add_class:"form-control" }}
+                                </div>
+                            </div>
+                            
+                            
+                            <!-- Password -->
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="id_password" class="form-label fw-bold">Password</label>
+                                    {{ form.password|add_class:"form-control" }}
+                                </div>
+                            </div>
+                            
+                            <!-- Profile Picture -->
+                            <div class="col-md-12">
+                                <div class="mb-3">
+                                    <label for="id_image" class="form-label fw-bold">Profile Picture</label>
+                                    {{ form.image|add_class:"form-control" }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn btn-danger btn-custom" type="submit">Register</button>
+                    <p class="text-center mt-4">
+                        Got an account? <a href="{% url 'login' %}" style="text-decoration: none;">Log in here!</a>
+                    </p>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
 </html>

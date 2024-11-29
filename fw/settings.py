@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'MangaKabeh',
     'django_bootstrap5',
     'django.contrib.humanize',
+    'widget_tweaks',
 ]
 
 MIDDLEWARE = [

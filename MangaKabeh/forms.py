@@ -45,12 +45,16 @@ VolumeFormSet = modelformset_factory(
         
 class UserRegistrationForm(forms.ModelForm):
     ROLE_CHOICES=[
+        ('', 'Select Role'),
         ('Seller', 'Seller'),
         ('Customer', 'Customer'),
     ]
     
-    role = forms.ChoiceField(choices=ROLE_CHOICES, widget=forms.RadioSelect)
-    address = forms.CharField(widget=forms.Textarea)
+    role = forms.ChoiceField(
+        choices=ROLE_CHOICES, 
+        widget=forms.Select,)
+    required=True
+    address = forms.CharField(widget=forms.Textarea(attrs={'rows': 1}))
     phone_number = forms.CharField(max_length=20)
     image = forms.ImageField()
     

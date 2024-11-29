@@ -23,53 +23,36 @@
     </ul>
 
     <!-- Order Table -->
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Order ID</th>
-                {% if is_seller %}
-                <th>Buyer</th>
-                {% else %}
-                <th>Seller</th>
-                {% endif %}
-                <th>Total Price</th>
-                <th>Status</th>
-                <th>Date</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for order in orders %}
-            <tr>
-                <td>{{ order.id }}</td>
-                {% if is_seller %}
-                <td>{{ order.user.username }}</td>
-                {% else %}
-                <td>{{ order.seller.username }}</td>
-                {% endif %}
-                <td>Rp.{{ order.total_price }}</td>
-                <td>{{ order.status }}</td>
-                <td>{{ order.created_at|date:"d M Y, H:i" }}</td>
-                <td>
+    <div style="overflow-x: auto;">
+        <table class="table table-bordered" style="width: 100%;">
+            <thead>
+                <tr>
+                    <th>Order ID</th>
                     {% if is_seller %}
-                        {% if order.payment %}
-                        <button 
-                            class="btn btn-primary view-payment-btn" 
-                            data-bs-toggle="modal" 
-                            data-bs-target="#paymentModal" 
-                            data-image-url="{{ order.payment.url }}"
-                            data-order-id="{{ order.id }}">
-                            View Payment
-                        </button>
-                        {% else %}
-                        <span>No payment uploaded</span>
-                        {% endif %}
+                    <th>Buyer</th>
                     {% else %}
-                        {% if order.status == 'Pending' %}
-                            <form method="post" action="{% url 'cancel_order' order.id %}" style="display:inline;">
-                                {% csrf_token %}
-                                <button type="submit" class="btn btn-danger">Cancel Order</button>
-                            </form>
+                    <th>Seller</th>
+                    {% endif %}
+                    <th>Total Price</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                <tr>
+                    <td>{{ order.id }}</td>
+                    {% if is_seller %}
+                    <td>{{ order.user.username }}</td>
+                    {% else %}
+                    <td>{{ order.seller.username }}</td>
+                    {% endif %}
+                    <td>Rp.{{ order.total_price }}</td>
+                    <td>{{ order.status }}</td>
+                    <td>{{ order.created_at|date:"d M Y, H:i" }}</td>
+                    <td>
+                        {% if is_seller %}
                             {% if order.payment %}
                             <button 
                                 class="btn btn-primary view-payment-btn" 
@@ -80,37 +63,56 @@
                                 View Payment
                             </button>
                             {% else %}
-                            <form method="post" action="{% url 'upload_payment' order.id %}" enctype="multipart/form-data" style="display:inline;">
-                                {% csrf_token %}
-                                <input type="file" name="payment" accept="image/*" required>
-                                <button type="submit" class="btn btn-primary">Upload Payment</button>
-                            </form>
+                            <span>No payment uploaded</span>
                             {% endif %}
-                        {% elif order.status == 'On Process' %}
-                            <form method="post" action="{% url 'done_order' order.id %}" style="display:inline;">
-                                {% csrf_token %}
-                                <button type="submit" class="btn btn-danger">Order Recieved</button>
-                            </form>
                         {% else %}
-                            {% if order.payment %}
-                            <button 
-                                class="btn btn-primary view-payment-btn" 
-                                data-bs-toggle="modal" 
-                                data-bs-target="#paymentModal" 
-                                data-image-url="{{ order.payment.url }}"
-                                data-order-id="{{ order.id }}">
-                                View Payment
-                            </button>
+                            {% if order.status == 'Pending' %}
+                                <form method="post" action="{% url 'cancel_order' order.id %}" style="display:inline;">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger">Cancel Order</button>
+                                </form>
+                                {% if order.payment %}
+                                <button 
+                                    class="btn btn-primary view-payment-btn" 
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#paymentModal" 
+                                    data-image-url="{{ order.payment.url }}"
+                                    data-order-id="{{ order.id }}">
+                                    View Payment
+                                </button>
+                                {% else %}
+                                <form method="post" action="{% url 'upload_payment' order.id %}" enctype="multipart/form-data" style="display:inline;">
+                                    {% csrf_token %}
+                                    <input type="file" name="payment" accept="image/*" required>
+                                    <button type="submit" class="btn btn-primary">Upload Payment</button>
+                                </form>
+                                {% endif %}
+                            {% elif order.status == 'On Process' %}
+                                <form method="post" action="{% url 'done_order' order.id %}" style="display:inline;">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger">Order Recieved</button>
+                                </form>
                             {% else %}
-                                No Payment image found.
+                                {% if order.payment %}
+                                <button 
+                                    class="btn btn-primary view-payment-btn" 
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#paymentModal" 
+                                    data-image-url="{{ order.payment.url }}"
+                                    data-order-id="{{ order.id }}">
+                                    View Payment
+                                </button>
+                                {% else %}
+                                    No Payment image found.
+                                {% endif %}
                             {% endif %}
                         {% endif %}
-                    {% endif %}
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
     <!-- Single Reusable Modal -->
     <div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
